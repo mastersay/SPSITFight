@@ -63,4 +63,4 @@ class Trying(App):
 
 if __name__ == "__main__":
     Trying().run()
-    print()
+    print("APP ENDED!")
