@@ -1,15 +1,29 @@
-<Open_screen>
+<OpenScreen>
+
+    name: name
+
     GridLayout:
         cols: 1
-        row: 1
-        size: root.width, root.height
-        AnchorLayout:
-            anchor_x: 'center'
-            anchor_y: 'center'
+        row: 3
+        size: 200, 200
+        center: root.width / 2, root.height / 2
+        spacing: [50, 50]
 
-            Label:
-                text: "Enter your name: "
-                text_size: cm(6), cm(4)
-            TextInput:
-                multiline: False
+        TextInput:
+            id: name
+            hint_text: "Enter your name"
+            size_hint_min_x: 100
+            size_hint_min_y: 50
+
+            multiline: False
+        Button:
+            text: "Submit"
+            on_press: root.submit_btn()
+
+
+
+
+
+
+
 

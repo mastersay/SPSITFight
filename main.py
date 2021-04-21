@@ -6,13 +6,14 @@ from kivy.uix.button import Button
 from functools import partial
 from kivy.uix.widget import Widget
 from kivy.uix.screenmanager import *
+from kivy.properties import ObjectProperty
 
 
 # player avatar
 class MainHero:
     def __init__(self):
         # name of player
-        self.nick = ""
+        self.nick = "Player"
         # player lvl
         self.lvl = 1
 
@@ -27,9 +28,20 @@ class MainHero:
         self.graphic_stat = 1
         self.nwm0 = 1
 
-class Open_screen(Widget):
+
+class OpenScreen(Widget):
+    name = ObjectProperty(None)
+
     def __init__(self, **kwargs):
-        super(Open_screen, self).__init__(**kwargs)
+        self.main_hero = MainHero()
+        super(OpenScreen, self).__init__(**kwargs)
+
+
+    def submit_btn(self):
+        if self.name.text:
+            self.main_hero.nick = self.name.text
+        print(self.main_hero.nick)
+
 
 class Style(GridLayout):
     def add_hero_clean(self, instance, text_box, clean_text_box=True):
@@ -74,7 +86,7 @@ class Style(GridLayout):
 class Design(App):
 
     def build(self):
-        return Open_screen()
+        return OpenScreen()
 
 
 if __name__ == "__main__":
