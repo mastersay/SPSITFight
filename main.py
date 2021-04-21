@@ -4,18 +4,34 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.uix.textinput import TextInput
 from kivy.uix.button import Button
 from functools import partial
+from kivy.uix.widget import Widget
+from kivy.uix.screenmanager import *
 
 
-class SuperHeroes:
+# player avatar
+class MainHero:
     def __init__(self):
-        self.super_heroes = {}
+        # name of player
+        self.nick = ""
+        # player lvl
+        self.lvl = 1
 
-    def add_superhero(self, name):
-        if name not in self.super_heroes:
-            self.super_heroes[name] = [{'lvl': 0}, {'hp': 100}]
+        # player stats
+        # player health
+        self.health = self.lvl * 10
+        # amount of healing for health
+        self.heal = {0: self.lvl}
 
+        # fight stats
+        self.logic_stat = 1
+        self.graphic_stat = 1
+        self.nwm0 = 1
 
-class Design(GridLayout):
+class Open_screen(Widget):
+    def __init__(self, **kwargs):
+        super(Open_screen, self).__init__(**kwargs)
+
+class Style(GridLayout):
     def add_hero_clean(self, instance, text_box, clean_text_box=True):
         if text_box.text:
             self.superheroes.add_superhero(text_box.text)
@@ -24,9 +40,9 @@ class Design(GridLayout):
         print(self.superheroes.super_heroes)
 
     def __init__(self, **kwargs):
-        super(Design, self).__init__(**kwargs)
+        super(Style, self).__init__(**kwargs)
 
-        self.superheroes = SuperHeroes()
+        self.superheroes = MainHero()
 
         self.cols = 1
         self.rows = 2
@@ -55,12 +71,12 @@ class Design(GridLayout):
         # print(self.superheroes.super_heroes)
 
 
-class Trying(App):
+class Design(App):
 
     def build(self):
-        return Design()
+        return Open_screen()
 
 
 if __name__ == "__main__":
-    Trying().run()
+    Design().run()
     print("APP ENDED!")
