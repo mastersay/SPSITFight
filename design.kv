@@ -1,0 +1,29 @@
+<OpenScreen>
+
+    name: name
+
+    GridLayout:
+        cols: 1
+        row: 3
+        size: 200, 200
+        center: root.width / 2, root.height / 2
+        spacing: [50, 50]
+
+        TextInput:
+            id: name
+            hint_text: "Enter your name"
+            size_hint_min_x: 100
+            size_hint_min_y: 50
+
+            multiline: False
+        Button:
+            text: "Submit"
+            on_press: root.submit_btn()
+
+
+
+
+
+
+
+
