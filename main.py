@@ -7,6 +7,7 @@ from functools import partial
 from kivy.uix.widget import Widget
 from kivy.uix.screenmanager import *
 from kivy.properties import ObjectProperty
+from random import randint, choice
 
 
 # player avatar
@@ -21,12 +22,53 @@ class MainHero:
         # player health
         self.health = self.lvl * 10
         # amount of healing for health
-        self.heal = {0: self.lvl}
+        self.heal = {'heal': 0, 'max_heal': self.lvl}
 
         # fight stats
-        self.logic_stat = 1
-        self.graphic_stat = 1
-        self.nwm0 = 1
+        self.programming_stat = 1
+        self.design_stat = 1
+        self.creativity_stat = 1
+
+
+# enemy boss avatars
+class BossHero:
+    def __init__(self, name: str, lvl: int, stats: dict):
+        self.name = name
+
+        self.health = lvl * 10
+        self.programming_stat = stats['programming_stat']
+        self.design_stat = stats['design_stat']
+        self.creativity = stats['creativity_stat']
+        self.stats = stats
+
+    def attack(self):
+        stat_values = sorted(self.stats.values())
+
+        def difference_check():
+            return True if stat_values == sorted(set(stat_values)) else False
+
+        def key_by_value(dictionary, search_by):
+            if difference_check():
+                for key, value in dictionary.items():
+                    if value == search_by:
+                        return key
+            else:
+                return [key for key, value in dictionary.items() if value == search_by]
+
+        chance = randint(1, 100)
+        if difference_check():
+            if chance > 40:
+                attack_pick = key_by_value(self.stats, max(stat_values))
+            elif chance > 10:
+                attack_pick = stat_values[1]
+            else:
+                attack_pick = key_by_value(self.stats, min(stat_values))
+        else:
+            if chance > 40:
+                attack_pick = choice(key_by_value(self.stats, max(stat_values)))
+            else:
+                attack_pick = choice(key_by_value(self.stats, min(stat_values)))
+        return attack_pick
 
 
 class OpenScreen(Widget):
@@ -35,7 +77,6 @@ class OpenScreen(Widget):
     def __init__(self, **kwargs):
         self.main_hero = MainHero()
         super(OpenScreen, self).__init__(**kwargs)
-
 
     def submit_btn(self):
         if self.name.text:
