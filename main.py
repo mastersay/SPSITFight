@@ -12,7 +12,7 @@ class SuperHeroes:
 
     def add_superhero(self, name):
         if name not in self.super_heroes:
-            self.super_heroes[name] = [{'lvl': 0}, {'hp': 100}]
+            self.super_heroes[name] = [{'LVL:': 0}, {'HP:': 100}]
 
 
 class Design(GridLayout):
