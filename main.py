@@ -136,7 +136,6 @@ class Style(GridLayout):
 
 
 class Design(App):
-
     def build(self):
         return OpenScreen()
 
