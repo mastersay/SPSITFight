@@ -1,0 +1,42 @@
+ScreenManagement:
+    id: screen_manager
+    OpenScreen:
+        name: 'OpenScreen'
+        manager: screen_manager
+    MainScreen:
+        name: 'MainScreen'
+        manager: screen_manager
+    FightScreen:
+        name: 'FightScreen'
+        manager: screen_manager
+
+
+<OpenScreen>
+    playerName: playerName
+    submit_button: submit_button
+    FloatLayout:
+
+        size: root.size
+        TextInput:
+            id: playerName
+            hint_text: "Enter your name"
+            size_hint: .2, .1
+            pos_hint: {'x':.4, 'y':.6}
+            multiline: False
+        Button:
+            id: submit_button
+            size_hint: .2, .1
+            pos_hint: {'x':.4, 'y':.4}
+            text: "Submit"
+            on_press:
+                app.root.current = 'MainScreen' if root.submit_btn() == True else 'OpenScreen'
+
+<MainScreen>
+    Button:
+        text: "go"
+        on_press: app.root.current = 'FightScreen'
+
+<FightScreen>
+    Button:
+        text: "go back"
+        on_press: app.root.current = 'OpenScreen'
