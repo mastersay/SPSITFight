@@ -30,6 +30,8 @@ class MainHero:
         self.creativity_stat = 1
 
 
+#  TODO: NPC class
+
 # enemy boss avatars
 class BossHero:
     def __init__(self, name: str, lvl: int, stats: dict):
@@ -73,6 +75,7 @@ class BossHero:
 
 class OpenScreen(Widget):
     name = ObjectProperty(None)
+    submit_button = ObjectProperty(None)
 
     def __init__(self, **kwargs):
         self.main_hero = MainHero()
@@ -80,8 +83,16 @@ class OpenScreen(Widget):
 
     def submit_btn(self):
         if self.name.text:
-            self.main_hero.nick = self.name.text
+            if len(self.name.text) < 18:
+                self.main_hero.nick = self.name.text
+                print(self.main_hero.nick)
+                return True
+            else:
+                print("Name can't exceed 18 characters!")
+                self.submit_button.text = "Name can't exceed 18 characters!"
+                return False
         print(self.main_hero.nick)
+        return False
 
 
 class Style(GridLayout):
