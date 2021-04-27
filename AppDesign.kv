@@ -3,6 +3,7 @@ ScreenManagement:
     OpenScreen:
         name: 'OpenScreen'
         manager: screen_manager
+        id: openScreen
     MainScreen:
         name: 'MainScreen'
         manager: screen_manager
@@ -12,13 +13,12 @@ ScreenManagement:
 
 
 <OpenScreen>
-    playerName: playerName
+    player_name: player_name
     submit_button: submit_button
     FloatLayout:
-
         size: root.size
         TextInput:
-            id: playerName
+            id: player_name
             hint_text: "Enter your name"
             size_hint: .2, .1
             pos_hint: {'x':.4, 'y':.6}
@@ -29,7 +29,8 @@ ScreenManagement:
             pos_hint: {'x':.4, 'y':.4}
             text: "Submit"
             on_press:
-                app.root.current = 'MainScreen' if root.submit_btn() == True else 'OpenScreen'
+                root.submit_btn()
+                app.root.current = 'MainScreen' if app.submit_btn() else 'OpenScreen'
 
 <MainScreen>
     Button:
