@@ -5,6 +5,7 @@ from kivy.properties import ObjectProperty
 from kivy.lang import Builder
 from kivy.core.window import Window
 # from kivy.logger import Logger, LoggerHistory
+from kivy.clock import Clock
 from random import randint, choice
 
 
@@ -15,6 +16,8 @@ class MainHero:
         self.nick = "Player"
         # player lvl
         self.lvl = 1
+        # amount of coins
+        self.coins = 1
 
         # player stats
         # player health
@@ -83,17 +86,42 @@ class OpenScreen(Screen):
 class MainScreen(Screen):
     fight_button = ObjectProperty(None)
     boss_fight_button = ObjectProperty(None)
+
+    programming_stat_label: ObjectProperty(None)
     programming_upgrade_btn: ObjectProperty(None)
+
+    design_stat_label: ObjectProperty(None)
     design_upgrade_btn: ObjectProperty(None)
+
+    creativity_stat_label: ObjectProperty(None)
     creativity_upgrade_btn: ObjectProperty(None)
+
+    heal_stat_label: ObjectProperty(None)
     heal_buy_btn: ObjectProperty(None)
 
     def __init__(self, **kwargs):
         super(MainScreen, self).__init__(**kwargs)
+        Clock.schedule_once(self.after_init)
 
+    # do after init
+    def after_init(self, dt):
+        self.app = App.get_running_app()
+        self.programming_stat_label.text = f'Programming {self.app.main_hero.programming_stat}'
+        self.design_stat_label.text = f'Design {self.app.main_hero.design_stat}'
+        self.creativity_stat_label.text = f'Creativity {self.app.main_hero.creativity_stat}'
+        self.heal_stat_label.text = f"Heal {self.app.main_hero.heal['heal']}/{self.app.main_hero.heal['max_heal']}"
 
-    def upgrade(self):
-        print(App.get_running_app().main_hero)
+    # func for upgrade stats
+    def upgrade(self, stat):
+        if stat != "heal":
+            setattr(self.app.main_hero, stat, getattr(self.app.main_hero, stat) + 1)
+            stringstat = stat.removesuffix('_stat')
+            print(getattr(getattr(self, f'{stat}_label'), 'text'))
+            setattr(getattr(self, f'{stat}_label'), 'text',
+                    f"{stringstat[0].capitalize() + stringstat[1:]} {getattr(self.app.main_hero, stat)}")
+        elif getattr(self.app.main_hero, 'heal')['heal'] < getattr(self.app.main_hero, 'heal')['max_heal']:
+            self.app.main_hero.heal['heal'] += 1
+            self.heal_stat_label.text = f"Heal {self.app.main_hero.heal['heal']}/{self.app.main_hero.heal['max_heal']}"
 
 
 class FightScreen(Screen):
@@ -101,9 +129,13 @@ class FightScreen(Screen):
 
 
 class ScreenManagement(ScreenManager):
+    def __init__(self, **kwargs):
+        super(ScreenManagement, self).__init__(**kwargs)
+
     pass
 
 
+# design constructor
 kv = Builder.load_file('AppDesign.kv')
 
 
@@ -112,10 +144,11 @@ class Design(App):
         super(Design, self).__init__(**kwargs)
         self.main_hero = MainHero()
 
+    # construct app
     def build(self):
         return kv
 
-    # how to access ids
+    # login button and nick check
     def submit_btn(self):
         if self.root.ids.open_screen.player_name_txtIn.text:
             if len(self.root.ids.open_screen.player_name_txtIn.text) < 18:

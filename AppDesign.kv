@@ -7,9 +7,11 @@ ScreenManagement:
     MainScreen:
         name: 'MainScreen'
         manager: screen_manager
+        id: main_screen
     FightScreen:
         name: 'FightScreen'
         manager: screen_manager
+        id: fight_screen
 
 <BasicBackground@Image>
     source: 'Assets/background.png'
@@ -100,31 +102,30 @@ ScreenManagement:
 
             Label:
                 id: programming_stat_label
-                text: "programming 1"
+
             UpgradeButton:
                 id: programming_upgrade_btn
-                on_press: root.upgrade()
+                on_press: root.upgrade('programming_stat')
 
             Label:
                 id: design_stat_label
-                text: "design 1"
             UpgradeButton:
                 id: design_upgrade_btn
-                on_press: root.upgrade()
+                on_press: root.upgrade('design_stat')
 
             Label:
                 id: creativity_stat_label
                 text: "creativity 1"
             UpgradeButton:
                 id: creativity_upgrade_btn
-                on_press: root.upgrade()
+                on_press: root.upgrade('creativity_stat')
 
             Label:
                 id: heal_stat_label
                 text: "heal 1"
             UpgradeButton:
                 id: heal_buy_btn
-                on_press: root.upgrade()
+                on_press: root.upgrade('heal')
 
 <FightScreen>
     Button:
