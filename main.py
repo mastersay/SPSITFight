@@ -77,12 +77,23 @@ class OpenScreen(Screen):
     warning_label = ObjectProperty(None)
 
     def __init__(self, **kwargs):
-        self.main_hero = MainHero()
         super(OpenScreen, self).__init__(**kwargs)
 
 
 class MainScreen(Screen):
-    pass
+    fight_button = ObjectProperty(None)
+    boss_fight_button = ObjectProperty(None)
+    programming_upgrade_btn: ObjectProperty(None)
+    design_upgrade_btn: ObjectProperty(None)
+    creativity_upgrade_btn: ObjectProperty(None)
+    heal_buy_btn: ObjectProperty(None)
+
+    def __init__(self, **kwargs):
+        super(MainScreen, self).__init__(**kwargs)
+
+
+    def upgrade(self):
+        print(App.get_running_app().main_hero)
 
 
 class FightScreen(Screen):
@@ -97,6 +108,10 @@ kv = Builder.load_file('AppDesign.kv')
 
 
 class Design(App):
+    def __init__(self, **kwargs):
+        super(Design, self).__init__(**kwargs)
+        self.main_hero = MainHero()
+
     def build(self):
         return kv
 
@@ -104,15 +119,17 @@ class Design(App):
     def submit_btn(self):
         if self.root.ids.open_screen.player_name_txtIn.text:
             if len(self.root.ids.open_screen.player_name_txtIn.text) < 18:
-                self.root.ids.open_screen.main_hero.nick = self.root.ids.open_screen.player_name_txtIn.text
-                print(self.root.ids.open_screen.main_hero.nick)
+                self.main_hero.nick = self.root.ids.open_screen.player_name_txtIn.text
+                print(self.main_hero.nick)
                 self.root.current = 'MainScreen'
+                self.root.ids.open_screen.player_name_txtIn.focus = False
             else:
                 print("Name can't exceed 18 characters!")
                 self.root.ids.open_screen.warning_label.text = "Name can't exceed 18 characters!"
         else:
             self.root.current = 'MainScreen'
-        print(self.root.ids.open_screen.main_hero.nick)
+            self.root.ids.open_screen.player_name_txtIn.focus = False
+        print(self.main_hero.nick)
 
 
 if __name__ == "__main__":

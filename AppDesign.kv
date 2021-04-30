@@ -16,6 +16,12 @@ ScreenManagement:
     size: root.size
     allow_stretch: True
     keep_ratio: False
+
+<UpgradeButton@Button>
+    size_hint: .1, .1
+    text: "+"
+
+
 <OpenScreen>
     player_name_txtIn: player_name_txtIn
     submit_button: submit_button
@@ -40,7 +46,6 @@ ScreenManagement:
             text_validate_unfocus: False
             on_text_validate:
                 app.submit_btn()
-
         Label:
             id: warning_label
             color: '#FE0000'
@@ -55,10 +60,71 @@ ScreenManagement:
             pos_hint: {'x':.4, 'y':.4}
             text: "Submit"
             on_press: app.submit_btn()
+
 <MainScreen>
-    Button:
-        text: "go"
-        on_press: app.root.current = 'FightScreen'
+    fight_button: fight_button
+    boss_fight_button: boss_fight_button
+
+    programming_stat_label: programming_stat_label
+    programming_upgrade_btn: programming_upgrade_btn
+
+    design_stat_label: design_stat_label
+    design_upgrade_btn: design_upgrade_btn
+
+    creativity_stat_label: creativity_stat_label
+    creativity_upgrade_btn: creativity_upgrade_btn
+
+    heal_stat_label: heal_stat_label
+    heal_buy_btn: heal_buy_btn
+
+    FloatLayout:
+        BasicBackground
+        GridLayout:
+            cols:1
+            rows:2
+            size_hint: .23, .2
+            pos_hint: {'x':.04, 'top':.95}
+            Button:
+                id: fight_button
+                text: "Fight"
+                on_press: app.root.current = 'FightScreen'
+            Button:
+                id: boss_fight_button
+                text: "Bosses"
+                on_press: app.root.current = 'FightScreen'
+        GridLayout:
+            cols: 4
+            rows: 2
+            size_hint: .4, .3
+            pos_hint: {'x':.3, 'bottom':.95}
+
+            Label:
+                id: programming_stat_label
+                text: "programming 1"
+            UpgradeButton:
+                id: programming_upgrade_btn
+                on_press: root.upgrade()
+
+            Label:
+                id: design_stat_label
+                text: "design 1"
+            UpgradeButton:
+                id: design_upgrade_btn
+                on_press: root.upgrade()
+
+            Label:
+                id: creativity_stat_label
+                text: "creativity 1"
+            UpgradeButton:
+                id: creativity_upgrade_btn
+                on_press: root.upgrade()
+
+            Label:
+                id: heal_stat_label
+                text: "heal 1"
+            UpgradeButton:
+                id: heal_buy_btn
+                on_press: root.upgrade()
 
 <FightScreen>
     Button:
