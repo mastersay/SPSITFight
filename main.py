@@ -70,7 +70,7 @@ class BossHero:
 
 
 class OpenScreen(Screen):
-    player_name = ObjectProperty(None)
+    player_name_txtIn = ObjectProperty(None)
     submit_button = ObjectProperty(None)
 
     def __init__(self, **kwargs):
@@ -78,9 +78,9 @@ class OpenScreen(Screen):
         super(OpenScreen, self).__init__(**kwargs)
 
     def submit_btn(self):
-        if self.player_name.text:
-            if len(self.player_name.text) < 18:
-                self.main_hero.nick = self.player_name.text
+        if self.player_name_txtIn.text:
+            if len(self.player_name_txtIn.text) < 18:
+                self.main_hero.nick = self.player_name_txtIn.text
                 print(self.main_hero.nick)
                 return True
             else:
@@ -102,18 +102,31 @@ class FightScreen(Screen):
 class ScreenManagement(ScreenManager):
     pass
 
-
 kv = Builder.load_file('AppDesign.kv')
 
 
 class Design(App):
     def build(self):
         return kv
+
     # how to access ids
     def submit_btn(self):
-        text = self.root.ids.openScreen.main_hero.nick
-        print(text)
+        if self.root.ids.open_screen.player_name_txtIn.text:
+            if len(self.root.ids.open_screen.player_name_txtIn.text) < 18:
+                self.root.ids.open_screen.main_hero.nick = self.root.ids.open_screen.player_name_txtIn.text
+                print(self.root.ids.open_screen.main_hero.nick)
+                return True
+            else:
+                print("Name can't exceed 18 characters!")
+                self.root.ids.open_screen.submit_button.text = "Name can't exceed 18 characters!"
+                return False
+        print(self.root.ids.open_screen.main_hero.nick)
         return True
+
+    # def submit_btn(self):
+    #     text = self.root.ids.open_screen.main_hero.nick
+    #     print(text)
+    #     return True
 
 
 if __name__ == "__main__":

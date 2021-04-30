@@ -3,7 +3,7 @@ ScreenManagement:
     OpenScreen:
         name: 'OpenScreen'
         manager: screen_manager
-        id: openScreen
+        id: open_screen
     MainScreen:
         name: 'MainScreen'
         manager: screen_manager
@@ -13,23 +13,36 @@ ScreenManagement:
 
 
 <OpenScreen>
-    player_name: player_name
+    player_name_txtIn: player_name_txtIn
     submit_button: submit_button
     FloatLayout:
         size: root.size
+        canvas.before:
+            Color:
+                rgba: (1, 1, 1, 1)
+            Rectangle:
+                pos: self.pos
+                size: self.size
         TextInput:
-            id: player_name
+            id: player_name_txtIn
             hint_text: "Enter your name"
             size_hint: .2, .1
             pos_hint: {'x':.4, 'y':.6}
             multiline: False
+        Label:
+            id: warning_label
+            color: '#FE0000'
+            text: "Name can't exceed 18 characters!"
+            size_hint: .2, .1
+            pos_hint: {'x':.4, 'y':.5}
         Button:
+            background_color: [255/255, 116/255, 0, 1]
+#            background_color: '#ff7400'
             id: submit_button
             size_hint: .2, .1
             pos_hint: {'x':.4, 'y':.4}
             text: "Submit"
             on_press:
-                root.submit_btn()
                 app.root.current = 'MainScreen' if app.submit_btn() else 'OpenScreen'
 
 <MainScreen>
