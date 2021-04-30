@@ -11,40 +11,50 @@ ScreenManagement:
         name: 'FightScreen'
         manager: screen_manager
 
-
+<BasicBackground@Image>
+    source: 'Assets/background.png'
+    size: root.size
+    allow_stretch: True
+    keep_ratio: False
 <OpenScreen>
     player_name_txtIn: player_name_txtIn
     submit_button: submit_button
+    warning_label: warning_label
     FloatLayout:
-        size: root.size
-        canvas.before:
-            Color:
-                rgba: (1, 1, 1, 1)
-            Rectangle:
-                pos: self.pos
-                size: self.size
+        BasicBackground
+#        size: root.size
+#        canvas.before:
+#            Color:
+#                rgba: (1, 1, 1, 1)
+#            Rectangle:
+#                pos: self.pos
+#                size: self.size
+
         TextInput:
             id: player_name_txtIn
             hint_text: "Enter your name"
             size_hint: .2, .1
+            font_size: self.size[0]/9
             pos_hint: {'x':.4, 'y':.6}
             multiline: False
+            text_validate_unfocus: False
+            on_text_validate:
+                app.submit_btn()
+
         Label:
             id: warning_label
             color: '#FE0000'
-            text: "Name can't exceed 18 characters!"
-            size_hint: .2, .1
-            pos_hint: {'x':.4, 'y':.5}
+            size_hint: .3, .2
+            font_size: self.size[0]/15
+            pos_hint: {'x':.35, 'y':.45}
         Button:
-            background_color: [255/255, 116/255, 0, 1]
-#            background_color: '#ff7400'
+#            background_color: [255/255, 116/255, 0, 1]
+            background_color: '#10567A'
             id: submit_button
             size_hint: .2, .1
             pos_hint: {'x':.4, 'y':.4}
             text: "Submit"
-            on_press:
-                app.root.current = 'MainScreen' if app.submit_btn() else 'OpenScreen'
-
+            on_press: app.submit_btn()
 <MainScreen>
     Button:
         text: "go"

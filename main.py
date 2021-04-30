@@ -3,6 +3,8 @@ from kivy.app import App
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.properties import ObjectProperty
 from kivy.lang import Builder
+from kivy.core.window import Window
+# from kivy.logger import Logger, LoggerHistory
 from random import randint, choice
 
 
@@ -72,23 +74,11 @@ class BossHero:
 class OpenScreen(Screen):
     player_name_txtIn = ObjectProperty(None)
     submit_button = ObjectProperty(None)
+    warning_label = ObjectProperty(None)
 
     def __init__(self, **kwargs):
         self.main_hero = MainHero()
         super(OpenScreen, self).__init__(**kwargs)
-
-    def submit_btn(self):
-        if self.player_name_txtIn.text:
-            if len(self.player_name_txtIn.text) < 18:
-                self.main_hero.nick = self.player_name_txtIn.text
-                print(self.main_hero.nick)
-                return True
-            else:
-                print("Name can't exceed 18 characters!")
-                self.submit_button.text = "Name can't exceed 18 characters!"
-                return False
-        print(self.main_hero.nick)
-        return True
 
 
 class MainScreen(Screen):
@@ -101,6 +91,7 @@ class FightScreen(Screen):
 
 class ScreenManagement(ScreenManager):
     pass
+
 
 kv = Builder.load_file('AppDesign.kv')
 
@@ -115,18 +106,13 @@ class Design(App):
             if len(self.root.ids.open_screen.player_name_txtIn.text) < 18:
                 self.root.ids.open_screen.main_hero.nick = self.root.ids.open_screen.player_name_txtIn.text
                 print(self.root.ids.open_screen.main_hero.nick)
-                return True
+                self.root.current = 'MainScreen'
             else:
                 print("Name can't exceed 18 characters!")
-                self.root.ids.open_screen.submit_button.text = "Name can't exceed 18 characters!"
-                return False
+                self.root.ids.open_screen.warning_label.text = "Name can't exceed 18 characters!"
+        else:
+            self.root.current = 'MainScreen'
         print(self.root.ids.open_screen.main_hero.nick)
-        return True
-
-    # def submit_btn(self):
-    #     text = self.root.ids.open_screen.main_hero.nick
-    #     print(text)
-    #     return True
 
 
 if __name__ == "__main__":
