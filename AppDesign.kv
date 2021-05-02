@@ -22,6 +22,9 @@ ScreenManagement:
 <UpgradeButton@Button>
     size_hint: .1, .1
     text: "+"
+<PlayerActionButton@Button>
+    size_hint: .1, .1
+    text: "USE"
 
 
 <OpenScreen>
@@ -64,6 +67,8 @@ ScreenManagement:
             on_press: app.submit_btn()
 
 <MainScreen>
+    coins_label: coins_label
+
     fight_button: fight_button
     boss_fight_button: boss_fight_button
 
@@ -94,6 +99,12 @@ ScreenManagement:
                 id: boss_fight_button
                 text: "Bosses"
                 on_press: app.root.current = 'FightScreen'
+        Label:
+            id: coins_label
+            color: '#EBFC00'
+            size_hint: .2, .2
+            pos_hint: {'right':1.06, 'top':1.07}
+            font_size: 15
         GridLayout:
             cols: 4
             rows: 2
@@ -102,7 +113,6 @@ ScreenManagement:
 
             Label:
                 id: programming_stat_label
-
             UpgradeButton:
                 id: programming_upgrade_btn
                 on_press: root.upgrade('programming_stat')
@@ -115,19 +125,80 @@ ScreenManagement:
 
             Label:
                 id: creativity_stat_label
-                text: "creativity 1"
             UpgradeButton:
                 id: creativity_upgrade_btn
                 on_press: root.upgrade('creativity_stat')
 
             Label:
                 id: heal_stat_label
-                text: "heal 1"
             UpgradeButton:
                 id: heal_buy_btn
                 on_press: root.upgrade('heal')
 
 <FightScreen>
-    Button:
-        text: "go back"
-        on_press: app.root.current = 'OpenScreen'
+    programming_stat_label: programming_stat_label
+#    programming_upgrade_btn: programming_upgrade_btn
+
+    design_stat_label: design_stat_label
+#    design_upgrade_btn: design_upgrade_btn
+
+    creativity_stat_label: creativity_stat_label
+#    creativity_upgrade_btn: creativity_upgrade_btn
+
+    heal_stat_label: heal_stat_label
+#    heal_buy_btn: heal_buy_btn
+
+    enemy_programming_stat_label: enemy_programming_stat_label
+
+    FloatLayout:
+        BasicBackground
+        GridLayout:
+            cols: 2
+            rows: 4
+            size_hint: .4, .3
+            pos_hint: {'left_x':.1, 'bottom':.95}
+
+            Label:
+                id: programming_stat_label
+            PlayerActionButton:
+                id: programming_upgrade_btn
+                on_press: root.player_action('programming_stat')
+
+            Label:
+                id: design_stat_label
+            PlayerActionButton:
+                id: design_upgrade_btn
+                on_press: root.player_action('design_stat')
+
+            Label:
+                id: creativity_stat_label
+            PlayerActionButton:
+                id: creativity_upgrade_btn
+                on_press: root.player_action('creativity_stat')
+
+            Label:
+                id: heal_stat_label
+            PlayerActionButton:
+                id: heal_buy_btn
+                on_press: root.player_action('heal')
+
+        GridLayout:
+            cols: 1
+            rows: 3
+            size_hint: .4, .3
+            pos_hint: {'right_x':.6, 'bottom':.95}
+
+            Label:
+                id: enemy_programming_stat_label
+
+
+            Label:
+                id: enemy_design_stat_label
+
+
+            Label:
+                id: enemy_creativity_stat_label
+
+#    Button:
+#        text: "go back"
+#        on_press: app.root.current = 'OpenScreen'
