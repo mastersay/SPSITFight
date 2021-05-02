@@ -7,7 +7,7 @@ from kivy.uix.label import Label
 from kivy.core.window import Window
 # from kivy.logger import Logger, LoggerHistory
 from kivy.clock import Clock
-from random import randint, choice
+from boss_enemies import BossHero
 
 
 # player avatar
@@ -31,48 +31,13 @@ class MainHero:
         self.design_stat = 1
         self.creativity_stat = 1
 
+        # killed bosses
+        self.boss_kills = 0
+
 
 #  TODO: NPC class
 
 # enemy boss avatars
-class BossHero:
-    def __init__(self, name: str, lvl: int, stats: dict):
-        self.name = name
-
-        self.health = lvl * 10
-        self.programming_stat = stats['programming_stat']
-        self.design_stat = stats['design_stat']
-        self.creativity = stats['creativity_stat']
-        self.stats = stats
-
-    def attack(self):
-        stat_values = sorted(self.stats.values())
-
-        def difference_check():
-            return True if stat_values == sorted(set(stat_values)) else False
-
-        def key_by_value(dictionary, search_by):
-            if difference_check():
-                for key, value in dictionary.items():
-                    if value == search_by:
-                        return key
-            else:
-                return [key for key, value in dictionary.items() if value == search_by]
-
-        chance = randint(1, 100)
-        if difference_check():
-            if chance > 40:
-                attack_pick = key_by_value(self.stats, max(stat_values))
-            elif chance > 10:
-                attack_pick = stat_values[1]
-            else:
-                attack_pick = key_by_value(self.stats, min(stat_values))
-        else:
-            if chance > 40:
-                attack_pick = choice(key_by_value(self.stats, max(stat_values)))
-            else:
-                attack_pick = choice(key_by_value(self.stats, min(stat_values)))
-        return attack_pick
 
 
 class OpenScreen(Screen):
@@ -130,7 +95,8 @@ class MainScreen(Screen):
             if self.app.main_hero.coins >= self.app.main_hero.heal['max_heal']:
                 upgrade_price = self.app.main_hero.heal['max_heal']
                 self.app.main_hero.heal['heal'] += 1
-                self.heal_stat_label.text = f"Heal {self.app.main_hero.heal['heal']}/{self.app.main_hero.heal['max_heal']}"
+                self.heal_stat_label.text = f"Heal " \
+                                            f"{self.app.main_hero.heal['heal']}/{self.app.main_hero.heal['max_heal']}"
         self.app.main_hero.coins -= upgrade_price
         self.coins_label.text = f"Coins {self.app.main_hero.coins}"
 
@@ -164,6 +130,15 @@ class FightScreen(Screen):
         self.creativity_stat_label.text = f'Creativity {self.app.main_hero.creativity_stat}'
         self.heal_stat_label.text = f"Heal {self.app.main_hero.heal['heal']}"
 
+    def boss_enemy(self):
+        self.enemy_programming_stat_label.text = f"Programming {self.app.boss_enemies[self.app.main_hero.boss_kills].programming_stat}"
+        self.enemy_design_stat_label.text = f"Design {self.app.boss_enemies[self.app.main_hero.boss_kills].design_stat}"
+        self.enemy_creativity_stat_label.text = f"Creativity {self.app.boss_enemies[self.app.main_hero.boss_kills].creativity_stat}"
+
+    def basic_enemy(self):
+        # TODO: enemy creator (after npc class)
+        pass
+
 
 class ScreenManagement(ScreenManager):
     def __init__(self, **kwargs):
@@ -180,7 +155,7 @@ class Design(App):
     def __init__(self, **kwargs):
         super(Design, self).__init__(**kwargs)
         self.main_hero = MainHero()
-        self.boss_enemies = []
+        self.boss_enemies = BossHero.enemies
 
     # construct app
     def build(self):
@@ -191,20 +166,21 @@ class Design(App):
         if self.root.ids.open_screen.player_name_txtIn.text:
             if len(self.root.ids.open_screen.player_name_txtIn.text) < 18:
                 self.main_hero.nick = self.root.ids.open_screen.player_name_txtIn.text
-                print(self.main_hero.nick)
+                # print(self.main_hero.nick)
                 self.root.current = 'MainScreen'
                 self.root.ids.open_screen.player_name_txtIn.focus = False
                 self.root.ids.main_screen.add_widget(
                     Label(text=self.main_hero.nick, pos_hint={'center_x': .5, 'center_y': .35}))
             else:
-                print("Name can't exceed 18 characters!")
+                # print("Name can't exceed 18 characters!")
                 self.root.ids.open_screen.warning_label.text = "Name can't exceed 18 characters!"
         else:
             self.root.current = 'MainScreen'
             self.root.ids.open_screen.player_name_txtIn.focus = False
             self.root.ids.main_screen.add_widget(
                 Label(text=self.main_hero.nick, pos_hint={'center_x': .5, 'center_y': .35}))
-        print(self.main_hero.nick)
+        # print(self.main_hero.nick)
+        print(self.boss_enemies)
 
 
 if __name__ == "__main__":

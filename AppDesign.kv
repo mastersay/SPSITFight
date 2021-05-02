@@ -94,11 +94,16 @@ ScreenManagement:
             Button:
                 id: fight_button
                 text: "Fight"
-                on_press: app.root.current = 'FightScreen'
+                on_press:
+                    app.root.current = 'FightScreen'
+                    app.root.ids.fight_screen.basic_enemy()
+
             Button:
                 id: boss_fight_button
                 text: "Bosses"
-                on_press: app.root.current = 'FightScreen'
+                on_press:
+                    app.root.current = 'FightScreen'
+                    app.root.ids.fight_screen.boss_enemy()
         Label:
             id: coins_label
             color: '#EBFC00'
@@ -149,6 +154,8 @@ ScreenManagement:
 #    heal_buy_btn: heal_buy_btn
 
     enemy_programming_stat_label: enemy_programming_stat_label
+    enemy_design_stat_label: enemy_design_stat_label
+    enemy_creativity_stat_label: enemy_creativity_stat_label
 
     FloatLayout:
         BasicBackground
@@ -156,7 +163,7 @@ ScreenManagement:
             cols: 2
             rows: 4
             size_hint: .4, .3
-            pos_hint: {'left_x':.1, 'bottom':.95}
+            pos_hint: {'left':.1, 'bottom':.95}
 
             Label:
                 id: programming_stat_label
@@ -186,7 +193,7 @@ ScreenManagement:
             cols: 1
             rows: 3
             size_hint: .4, .3
-            pos_hint: {'right_x':.6, 'bottom':.95}
+            pos_hint: {'right':1, 'bottom':.95}
 
             Label:
                 id: enemy_programming_stat_label
