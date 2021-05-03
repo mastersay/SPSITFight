@@ -7,7 +7,7 @@ from kivy.uix.label import Label
 from kivy.core.window import Window
 # from kivy.logger import Logger, LoggerHistory
 from kivy.clock import Clock
-from boss_enemies import BossHero
+from enemies import BossHero, BasicEnemy
 
 
 # player avatar
@@ -33,11 +33,6 @@ class MainHero:
 
         # killed bosses
         self.boss_kills = 0
-
-
-#  TODO: NPC class
-
-# enemy boss avatars
 
 
 class OpenScreen(Screen):
@@ -131,13 +126,25 @@ class FightScreen(Screen):
         self.heal_stat_label.text = f"Heal {self.app.main_hero.heal['heal']}"
 
     def boss_enemy(self):
-        self.enemy_programming_stat_label.text = f"Programming {self.app.boss_enemies[self.app.main_hero.boss_kills].programming_stat}"
-        self.enemy_design_stat_label.text = f"Design {self.app.boss_enemies[self.app.main_hero.boss_kills].design_stat}"
-        self.enemy_creativity_stat_label.text = f"Creativity {self.app.boss_enemies[self.app.main_hero.boss_kills].creativity_stat}"
+        # Labels with stats
+        self.enemy_programming_stat_label.text \
+            = f"Programming {self.app.boss_enemies[self.app.main_hero.boss_kills].programming_stat}"
+        self.enemy_design_stat_label.text \
+            = f"Design {self.app.boss_enemies[self.app.main_hero.boss_kills].design_stat}"
+        self.enemy_creativity_stat_label.text \
+            = f"Creativity {self.app.boss_enemies[self.app.main_hero.boss_kills].creativity_stat}"
 
     def basic_enemy(self):
-        # TODO: enemy creator (after npc class)
-        pass
+        # Construct enemy
+        enemy = BasicEnemy(self.app.main_hero.lvl)
+
+        # Labels with stats
+        self.enemy_programming_stat_label.text \
+            = f"Programming {enemy.stats['programming_stat']}"
+        self.enemy_design_stat_label.text \
+            = f"Design {enemy.stats['design_stat']}"
+        self.enemy_creativity_stat_label.text \
+            = f"Creativity {enemy.stats['creativity_stat']}"
 
 
 class ScreenManagement(ScreenManager):
