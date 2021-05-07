@@ -86,11 +86,15 @@ ScreenManagement:
 
     FloatLayout:
         BasicBackground
+        Label:
+            text: app.main_hero.nick
+            pos_hint: {'center_x': .5, 'center_y': .35}
         GridLayout:
             cols:1
             rows:2
             size_hint: .23, .2
             pos_hint: {'x':.04, 'top':.95}
+
             Button:
                 id: fight_button
                 text: "Fight"
@@ -106,6 +110,7 @@ ScreenManagement:
                     app.root.ids.fight_screen.boss_enemy()
         Label:
             id: coins_label
+            text: "Coins {0}".format(app.main_hero.coins)
             color: '#EBFC00'
             size_hint: .2, .2
             pos_hint: {'right':1.06, 'top':1.07}
@@ -118,24 +123,28 @@ ScreenManagement:
 
             Label:
                 id: programming_stat_label
+                text: "Programming {0}".format(app.main_hero.programming_stat)
             UpgradeButton:
                 id: programming_upgrade_btn
                 on_press: root.upgrade('programming_stat')
 
             Label:
                 id: design_stat_label
+                text: "Design {0}".format(app.main_hero.design_stat)
             UpgradeButton:
                 id: design_upgrade_btn
                 on_press: root.upgrade('design_stat')
 
             Label:
                 id: creativity_stat_label
+                text: "Creativity {0}".format(app.main_hero.creativity_stat)
             UpgradeButton:
                 id: creativity_upgrade_btn
                 on_press: root.upgrade('creativity_stat')
 
             Label:
                 id: heal_stat_label
+                text: "Heal {0}/{1}".format(app.main_hero.heal['heal'],app.main_hero.heal['max_heal'])
             UpgradeButton:
                 id: heal_buy_btn
                 on_press: root.upgrade('heal')
@@ -159,6 +168,9 @@ ScreenManagement:
 
     FloatLayout:
         BasicBackground
+        Label:
+            text: app.main_hero.nick
+            pos_hint: {'center_x': .25, 'center_y': .35}
         GridLayout:
             cols: 2
             rows: 4
@@ -167,27 +179,33 @@ ScreenManagement:
 
             Label:
                 id: programming_stat_label
+                text: "Programming {0}".format(app.main_hero.programming_stat)
             PlayerActionButton:
-                id: programming_upgrade_btn
                 on_press: root.player_action('programming_stat')
 
             Label:
                 id: design_stat_label
+                text: "Design {0}".format(app.main_hero.design_stat)
             PlayerActionButton:
-                id: design_upgrade_btn
                 on_press: root.player_action('design_stat')
 
             Label:
                 id: creativity_stat_label
+                text: "Creativity {0}".format(app.main_hero.creativity_stat)
             PlayerActionButton:
-                id: creativity_upgrade_btn
                 on_press: root.player_action('creativity_stat')
 
             Label:
                 id: heal_stat_label
+                text: "Heal {0}/{1}".format(app.main_hero.heal['heal'],app.main_hero.heal['max_heal'])
             PlayerActionButton:
-                id: heal_buy_btn
                 on_press: root.player_action('heal')
+        Button:
+            text: "X"
+            pos_hint: {'x':.01, 'y':.01}
+            size_hint: .02, .02
+            on_press:
+                app.root.current= 'MainScreen'
 
         GridLayout:
             cols: 1

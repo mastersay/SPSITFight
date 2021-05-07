@@ -1,24 +1,37 @@
+import kivy.event
 from kivy.app import App
-# from functools import partial
+from functools import partial
 from kivy.uix.screenmanager import ScreenManager, Screen
-from kivy.properties import ObjectProperty
-from kivy.lang import Builder
+from kivy.properties import *
+from kivy.lang import Builder, parser
 from kivy.uix.label import Label
 from kivy.core.window import Window
 # from kivy.logger import Logger, LoggerHistory
+from kivy.event import EventDispatcher
 from kivy.clock import Clock
 from enemies import BossHero, BasicEnemy
 
 
 # player avatar
-class MainHero:
-    def __init__(self):
+class MainHero(EventDispatcher):
+    nick = StringProperty()
+    lvl = NumericProperty()
+    coins = NumericProperty()
+    health = NumericProperty()
+    heal = DictProperty()
+    programming_stat = NumericProperty()
+    design_stat = NumericProperty()
+    creativity_stat = NumericProperty()
+    boss_kills = NumericProperty()
+
+    def __init__(self, *args, **kwargs):
+        super(MainHero, self).__init__(*args, **kwargs)
         # name of player
         self.nick = "Player"
         # player lvl
         self.lvl = 1
         # amount of coins
-        self.coins = 1
+        self.coins = 100
 
         # player stats
         # player health
@@ -64,28 +77,37 @@ class MainScreen(Screen):
 
     def __init__(self, **kwargs):
         super(MainScreen, self).__init__(**kwargs)
-        Clock.schedule_once(self.after_init)
+        self.af_init = Clock.create_trigger(self._init)
+        self.af_init()
 
     # Schedule after init
-    def after_init(self, dt):
+    def _init(self, dt):
         self.app = App.get_running_app()
-        self.programming_stat_label.text = f'Programming {self.app.main_hero.programming_stat}'
-        self.design_stat_label.text = f'Design {self.app.main_hero.design_stat}'
-        self.creativity_stat_label.text = f'Creativity {self.app.main_hero.creativity_stat}'
-        self.heal_stat_label.text = f"Heal {self.app.main_hero.heal['heal']}/{self.app.main_hero.heal['max_heal']}"
-        self.coins_label.text = f"Coins {self.app.main_hero.coins}"
+        # self.programming_stat_label.text = f'Programming {self.app.main_hero.programming_stat}'
+        # self.design_stat_label.text = f'Design {self.app.main_hero.design_stat}'
+        # self.creativity_stat_label.text = f'Creativity {self.app.main_hero.creativity_stat}'
+        # self.heal_stat_label.text = f"Heal {self.app.main_hero.heal['heal']}/{self.app.main_hero.heal['max_heal']}"
+        # self.coins_label.text = f"Coins {self.app.main_hero.coins}"
+
+    # Update values on screen, on pre enter
+    def on_pre_enter(self, *args):
+        self.af_init()
 
     # func for upgrade stats
     def upgrade(self, stat):
+        # self.programming_stat_label.update()
         upgrade_price = 0
         if stat != "heal":
             if self.app.main_hero.coins >= getattr(self.app.main_hero, stat):
                 upgrade_price = getattr(self.app.main_hero, stat)
                 setattr(self.app.main_hero, stat, getattr(self.app.main_hero, stat) + 1)
+
+                # print(self.app.a.__dict__)
+                # self.__dict__
+
                 stat_no_suffix = stat.removesuffix('_stat')
-                print(getattr(getattr(self, f'{stat}_label'), 'text'))
-                setattr(getattr(self, f'{stat}_label'), 'text',
-                        f"{stat_no_suffix[0].capitalize() + stat_no_suffix[1:]} {getattr(self.app.main_hero, stat)}")
+                # setattr(getattr(self, f'{stat}_label'), 'text',
+                #         f"{stat_no_suffix[0].capitalize() + stat_no_suffix[1:]} {getattr(self.app.main_hero, stat)}")
         elif getattr(self.app.main_hero, 'heal')['heal'] < getattr(self.app.main_hero, 'heal')['max_heal']:
             if self.app.main_hero.coins >= self.app.main_hero.heal['max_heal']:
                 upgrade_price = self.app.main_hero.heal['max_heal']
@@ -115,15 +137,21 @@ class FightScreen(Screen):
 
     def __init__(self, **kwargs):
         super(FightScreen, self).__init__(**kwargs)
-        Clock.schedule_once(self.after_init)
+        # self.af_init = Clock.schedule_once(self.after_init)
+        self.af_init = Clock.create_trigger(self._init)
+        self.af_init()
 
     # Schedule after init
-    def after_init(self, dt):
+    def _init(self, dt):
         self.app = App.get_running_app()
-        self.programming_stat_label.text = f'Programming {self.app.main_hero.programming_stat}'
-        self.design_stat_label.text = f'Design {self.app.main_hero.design_stat}'
-        self.creativity_stat_label.text = f'Creativity {self.app.main_hero.creativity_stat}'
-        self.heal_stat_label.text = f"Heal {self.app.main_hero.heal['heal']}"
+        # self.programming_stat_label.text = f'Programming {self.app.main_hero.programming_stat}'
+        # self.design_stat_label.text = f'Design {self.app.main_hero.design_stat}'
+        # self.creativity_stat_label.text = f'Creativity {self.app.main_hero.creativity_stat}'
+        # self.heal_stat_label.text = f"Heal {self.app.main_hero.heal['heal']}"
+
+    # Update values on screen, on pre enter
+    def on_pre_enter(self, *args):
+        self.af_init()
 
     def boss_enemy(self):
         # Labels with stats
@@ -150,25 +178,44 @@ class FightScreen(Screen):
 class ScreenManagement(ScreenManager):
     def __init__(self, **kwargs):
         super(ScreenManagement, self).__init__(**kwargs)
+        # self.af_init = Clock.create_trigger(self._init)
+        self.af_init = Clock.schedule_once(self._init)
+        self.af_init()
 
-    pass
-
-
-# design constructor
-kv = Builder.load_file('AppDesign.kv')
+    # Schedule after init
+    def _init(self, dt):
+        self.app = App.get_running_app()
 
 
 class Design(App):
+    main_hero = ObjectProperty()
+
     def __init__(self, **kwargs):
         super(Design, self).__init__(**kwargs)
-        self.main_hero = MainHero()
+        # self.main_hero = MainHero()
         self.boss_enemies = BossHero.enemies
+        self.main_hero = MainHero()
 
-    # construct app
+        # self.a
+        # self.preps.num = NumericProperty(self.main_hero.programming_stat, rebind=True)
+        # global a
+        # print(self.a.__dict__)
+        # self.a.coins -= 20
+        # print(self.main_hero.coins, self.a.coins)
+
+        # num2 = NumericProperty(self.main_hero.programming_stat)
+        # self.apply_property(l=NumericProperty(self.main_hero.programming_stat))
+
+        def my_x_callback(obj, value):
+            print('on object', obj, 'x changed to', value)
+
+    # Construct app
     def build(self):
+        # design constructor
+        kv = Builder.load_file('AppDesign.kv')
         return kv
 
-    # login button and nick check
+    # Login button and nick check
     def submit_btn(self):
         if self.root.ids.open_screen.player_name_txtIn.text:
             if len(self.root.ids.open_screen.player_name_txtIn.text) < 18:
@@ -176,18 +223,12 @@ class Design(App):
                 # print(self.main_hero.nick)
                 self.root.current = 'MainScreen'
                 self.root.ids.open_screen.player_name_txtIn.focus = False
-                self.root.ids.main_screen.add_widget(
-                    Label(text=self.main_hero.nick, pos_hint={'center_x': .5, 'center_y': .35}))
             else:
                 # print("Name can't exceed 18 characters!")
                 self.root.ids.open_screen.warning_label.text = "Name can't exceed 18 characters!"
         else:
             self.root.current = 'MainScreen'
             self.root.ids.open_screen.player_name_txtIn.focus = False
-            self.root.ids.main_screen.add_widget(
-                Label(text=self.main_hero.nick, pos_hint={'center_x': .5, 'center_y': .35}))
-        # print(self.main_hero.nick)
-        print(self.boss_enemies)
 
 
 if __name__ == "__main__":
