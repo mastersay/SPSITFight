@@ -22,7 +22,7 @@ ScreenManagement:
 <UpgradeButton@Button>
     size_hint: .1, .1
     text: "+"
-<PlayerActionButton@Button>
+<PlayerActionButton@ToggleButton>
     size_hint: .1, .1
     text: "USE"
 
@@ -173,9 +173,18 @@ ScreenManagement:
 
     FloatLayout:
         BasicBackground
+
         Label:
             text: app.main_hero.nick
             pos_hint: {'center_x': .25, 'center_y': .35}
+        Label:
+            text: "Health: {0}".format(app.main_hero.health)
+            pos_hint: {'center_x': .25, 'center_y': .4}
+
+        Label:
+            text: "Health: {0}".format(root.enemy.health)
+            pos_hint: {'center_x': .8, 'center_y': .4}
+
         Label:
             text: root.enemy.name
             pos_hint: {'center_x': .8, 'center_y': .35}
@@ -193,25 +202,38 @@ ScreenManagement:
                 id: programming_stat_label
                 text: "Programming {0}".format(app.main_hero.programming_stat)
             PlayerActionButton:
-                on_release: root.player_action('programming_stat')
+                group: 'player_action'
+                on_state:
+                    if self.state == 'down': \
+                    root.player_action('programming_stat')
 
             Label:
                 id: design_stat_label
                 text: "Design {0}".format(app.main_hero.design_stat)
             PlayerActionButton:
-                on_release: root.player_action('design_stat')
+                group: 'player_action'
+                on_state:
+                    if self.state == 'down': \
+                    root.player_action('design_stat')
 
             Label:
                 id: creativity_stat_label
                 text: "Creativity {0}".format(app.main_hero.creativity_stat)
             PlayerActionButton:
-                on_release: root.player_action('creativity_stat')
+                group: 'player_action'
+                on_state:
+                    if self.state == 'down': \
+                    root.player_action('creativity_stat')
 
             Label:
                 id: heal_stat_label
                 text: "Heal {0}/{1}".format(app.main_hero.heal['heal'],app.main_hero.heal['max_heal'])
             PlayerActionButton:
-                on_release: root.player_action('heal')
+                group: 'player_action'
+                on_state:
+                    if self.state == 'down': \
+                    root.player_action('heal')
+
         Button:
             text: "X"
             pos_hint: {'x':.01, 'y':.01}

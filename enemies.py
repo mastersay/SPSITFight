@@ -17,9 +17,9 @@ class BossHero(EventDispatcher):
         self.name = name
         self.lvl = lvl
         self.health = lvl * 10
-        self.programming_stat = stats['programming_stat']
-        self.design_stat = stats['design_stat']
-        self.creativity_stat = stats['creativity_stat']
+        # self.programming_stat = stats['programming_stat']
+        # self.design_stat = stats['design_stat']
+        # self.creativity_stat = stats['creativity_stat']
         self.stats = stats
         self.__class__.enemies.append(self)
 
@@ -45,7 +45,7 @@ class BossHero(EventDispatcher):
             if chance > 40:
                 attack_pick = key_by_value(self.stats, max(stat_values))
             elif chance > 10:
-                attack_pick = stat_values[1]
+                attack_pick = key_by_value(self.stats, stat_values[1])
             else:
                 attack_pick = key_by_value(self.stats, min(stat_values))
         else:
@@ -66,7 +66,7 @@ class BasicEnemy(EventDispatcher):
     def __init__(self, hero_lvl: int):
         super(BasicEnemy, self).__init__()
 
-        def ad_sub_generator(main_value: int, scale, operators=('+', '-')) -> int:
+        def ad_sub_generator(main_value: int, scale: int, operators=('+', '-')) -> int:
             return eval(f"{main_value}{choice(operators)}{scale}")
 
         self.name = choice(ascii_uppercase) + ''.join(choice(ascii_lowercase) for _ in range(randint(3, 6)))
@@ -102,7 +102,7 @@ class BasicEnemy(EventDispatcher):
             if chance > 50:
                 attack_pick = key_by_value(self.stats, max(stat_values))
             elif chance > 20:
-                attack_pick = stat_values[1]
+                attack_pick = key_by_value(self.stats, stat_values[1])
             else:
                 attack_pick = key_by_value(self.stats, min(stat_values))
         else:

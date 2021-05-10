@@ -1,5 +1,8 @@
+import time
 from kivy.app import App
+from kivy.base import *
 from functools import partial
+from kivy.uix.togglebutton import ToggleButtonBehavior
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.properties import *
 from kivy.lang import Builder, parser
@@ -13,7 +16,7 @@ from enemies import BossHero, BasicEnemy
 from random import choice
 
 
-# player avatar
+# Player avatar
 class MainHero(EventDispatcher):
     nick = StringProperty()
     lvl = NumericProperty()
@@ -135,6 +138,7 @@ class FightScreen(Screen):
         # self.af_init = Clock.schedule_once(self.after_init)
         self.af_init = Clock.create_trigger(self._init)
         self.af_init()
+        self.player_action_pick = None
 
     # Schedule after init
     def _init(self, dt):
@@ -142,8 +146,9 @@ class FightScreen(Screen):
 
     # Update values on screen, on pre enter, prepare starting_hit animation
     def on_pre_enter(self, *args):
-        self.af_init()
-        self.starting_hit = choice(["Player", "Enemy"])
+        # self.starting_hit = choice(["Player", "Enemy"])
+        self.starting_hit = "Enemy"
+
         move_col = (0, 1, 0, 1)
         if self.starting_hit == "Enemy":
             move_col = (1, 0, 0, 1)
@@ -152,12 +157,83 @@ class FightScreen(Screen):
                                         color=move_col)
         self.add_widget(self.starting_hit_label)
 
+    def fight(self, *args):
+        pass
+        # self.starting_hit_label.parent.remove_widget(self.starting_hit_label)
+        # hero_alive = True
+        # enemy_alive = True
+        #
+        # def enemy_move():
+        #     # Enemy attack stat
+        #     enemy_attack_stat = self.enemy.attack()
+        #     # Enemy stat value
+        #     enemy_attack = self.enemy.stats[self.enemy.attack()]
+        #     # Possible damage
+        #     damage = enemy_attack - getattr(self.app.main_hero, enemy_attack_stat)
+        #     print(enemy_attack_stat, enemy_attack, damage)
+        #     if damage >= 0:
+        #         if self.app.main_hero.health - damage > 0:
+        #             self.app.main_hero.health -= damage
+        #         else:
+        #             nonlocal hero_alive
+        #             hero_alive = False
+        #             self.app.main_hero.health = 0
+        #         print(self.app.main_hero.health)
+        #     else:
+        #         pass  # TODO: warning that enemy is weaker than hero
+        #     return hero_alive
+        #
+        # def player_move():
+        #     # Enemy stat value
+        #     # print(self.enemy.stats, self.player_action_pick)
+        #     time.sleep(0.5)
+        #     if self.player_action_pick is None:
+        #         time.sleep(1)
+        #         Clock.create_trigger(player_move())
+        #
+        #     enemy_attack = self.enemy.stats[self.player_action_pick]
+        #
+        #     # Possible damage
+        #     damage = getattr(self.app.main_hero, self.player_action_pick) - enemy_attack
+        #     print(self.player_action_pick, enemy_attack, damage)
+        #     if damage >= 0:
+        #         if self.enemy.health - damage > 0:
+        #             self.enemy.health -= damage
+        #         else:
+        #             nonlocal enemy_alive
+        #             enemy_alive = False
+        #             self.enemy.health = 0
+        #         print(self.enemy.health)
+        #     else:
+        #         pass  # TODO: warning that player is weaker than enemy
+        #     return enemy_alive
+        #
+        # if self.starting_hit == "Enemy":
+        #     if not enemy_move():
+        #         print("Player dead")
+        #         pass  # TODO: Died warning
+        #     # elif not player_move():
+        #     #     print("Enemy dead")
+        #     #     pass
+        #     else:
+        #         def chcec():
+        #             player_action = ToggleButtonBehavior.get_widgets('player_action')
+        #             for btn in player_action:
+        #                 if btn.state == "down":
+        #                     return True
+        #                 else:
+        #                     time.sleep(1)
+        #                     chcec()
+        #         if chcec() is True:
+        #             print("is active")
+        # else:
+        #     print("Player move")
+
     # Execute animation on screen open
     def on_enter(self, *args):
         # self.starting_hit_anim = Animation(duration=1,) font_size=130, color=col)
         self.starting_hit_anim.start(widget=self.starting_hit_label)
-        self.starting_hit_anim.bind(
-            on_complete=lambda x, y: self.starting_hit_label.parent.remove_widget(self.starting_hit_label))
+        self.starting_hit_anim.bind(on_complete=self.fight)
 
     def boss_enemy(self):
         # Set enemy to boss
@@ -166,6 +242,9 @@ class FightScreen(Screen):
     def basic_enemy(self):
         # Set and construct BasicEnemy
         self.enemy = BasicEnemy(self.app.main_hero.lvl)
+
+    def player_action(self, action):
+        self.player_action_pick = action
 
 
 class ScreenManagement(ScreenManager):
