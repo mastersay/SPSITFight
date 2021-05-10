@@ -1,13 +1,21 @@
+from kivy.properties import *
+from kivy.event import EventDispatcher
 from random import randint, choice, sample
 from string import ascii_uppercase, ascii_lowercase
 
 
 # Enemy boss avatar
-class BossHero:
+class BossHero(EventDispatcher):
     enemies = []
+    name = StringProperty()
+    lvl = NumericProperty()
+    health = NumericProperty()
+    stats = DictProperty()
 
     def __init__(self, name: str, lvl: int, stats: dict):
+        super(BossHero, self).__init__()
         self.name = name
+        self.lvl = lvl
         self.health = lvl * 10
         self.programming_stat = stats['programming_stat']
         self.design_stat = stats['design_stat']
@@ -48,9 +56,16 @@ class BossHero:
         return attack_pick
 
 
-class BasicEnemy(BossHero):
+class BasicEnemy(EventDispatcher):
+    name = StringProperty()
+    lvl = NumericProperty()
+    health = NumericProperty()
+    primary_stat, sc_stat, third_stat = StringProperty(), StringProperty(), StringProperty()
+    stats = DictProperty()
 
     def __init__(self, hero_lvl: int):
+        super(BasicEnemy, self).__init__()
+
         def ad_sub_generator(main_value: int, scale, operators=('+', '-')) -> int:
             return eval(f"{main_value}{choice(operators)}{scale}")
 

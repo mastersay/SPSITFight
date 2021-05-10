@@ -64,7 +64,7 @@ ScreenManagement:
             size_hint: .2, .1
             pos_hint: {'x':.4, 'y':.4}
             text: "Submit"
-            on_press: app.submit_btn()
+            on_release: app.submit_btn()
 
 <MainScreen>
     coins_label: coins_label
@@ -88,7 +88,12 @@ ScreenManagement:
         BasicBackground
         Label:
             text: app.main_hero.nick
-            pos_hint: {'center_x': .5, 'center_y': .35}
+            pos_hint: {'center_x': .5, 'y': .36}
+            size_hint_max: self.size
+        Label:
+            text: "LEVEL {}".format(app.main_hero.lvl)
+            pos_hint: {'center_x': .5, 'y': .3}
+            size_hint_max: self.size
         GridLayout:
             cols:1
             rows:2
@@ -98,14 +103,14 @@ ScreenManagement:
             Button:
                 id: fight_button
                 text: "Fight"
-                on_press:
+                on_release:
                     app.root.current = 'FightScreen'
                     app.root.ids.fight_screen.basic_enemy()
 
             Button:
                 id: boss_fight_button
                 text: "Bosses"
-                on_press:
+                on_release:
                     app.root.current = 'FightScreen'
                     app.root.ids.fight_screen.boss_enemy()
         Label:
@@ -126,28 +131,28 @@ ScreenManagement:
                 text: "Programming {0}".format(app.main_hero.programming_stat)
             UpgradeButton:
                 id: programming_upgrade_btn
-                on_press: root.upgrade('programming_stat')
+                on_release: root.upgrade('programming_stat')
 
             Label:
                 id: design_stat_label
                 text: "Design {0}".format(app.main_hero.design_stat)
             UpgradeButton:
                 id: design_upgrade_btn
-                on_press: root.upgrade('design_stat')
+                on_release: root.upgrade('design_stat')
 
             Label:
                 id: creativity_stat_label
                 text: "Creativity {0}".format(app.main_hero.creativity_stat)
             UpgradeButton:
                 id: creativity_upgrade_btn
-                on_press: root.upgrade('creativity_stat')
+                on_release: root.upgrade('creativity_stat')
 
             Label:
                 id: heal_stat_label
                 text: "Heal {0}/{1}".format(app.main_hero.heal['heal'],app.main_hero.heal['max_heal'])
             UpgradeButton:
                 id: heal_buy_btn
-                on_press: root.upgrade('heal')
+                on_release: root.upgrade('heal')
 
 <FightScreen>
     programming_stat_label: programming_stat_label
@@ -171,6 +176,13 @@ ScreenManagement:
         Label:
             text: app.main_hero.nick
             pos_hint: {'center_x': .25, 'center_y': .35}
+        Label:
+            text: root.enemy.name
+            pos_hint: {'center_x': .8, 'center_y': .35}
+#        Button:
+#            text: "pre"
+#            on_release: root.s()
+#            size_hint: .2, .2
         GridLayout:
             cols: 2
             rows: 4
@@ -181,25 +193,25 @@ ScreenManagement:
                 id: programming_stat_label
                 text: "Programming {0}".format(app.main_hero.programming_stat)
             PlayerActionButton:
-                on_press: root.player_action('programming_stat')
+                on_release: root.player_action('programming_stat')
 
             Label:
                 id: design_stat_label
                 text: "Design {0}".format(app.main_hero.design_stat)
             PlayerActionButton:
-                on_press: root.player_action('design_stat')
+                on_release: root.player_action('design_stat')
 
             Label:
                 id: creativity_stat_label
                 text: "Creativity {0}".format(app.main_hero.creativity_stat)
             PlayerActionButton:
-                on_press: root.player_action('creativity_stat')
+                on_release: root.player_action('creativity_stat')
 
             Label:
                 id: heal_stat_label
                 text: "Heal {0}/{1}".format(app.main_hero.heal['heal'],app.main_hero.heal['max_heal'])
             PlayerActionButton:
-                on_press: root.player_action('heal')
+                on_release: root.player_action('heal')
         Button:
             text: "X"
             pos_hint: {'x':.01, 'y':.01}
@@ -215,14 +227,15 @@ ScreenManagement:
 
             Label:
                 id: enemy_programming_stat_label
-
+                text: "Programming {0}".format(root.enemy.stats['programming_stat'])
 
             Label:
                 id: enemy_design_stat_label
-
+                text: "Design {0}".format(root.enemy.stats['design_stat'])
 
             Label:
                 id: enemy_creativity_stat_label
+                text: "Creativity {0}".format(root.enemy.stats['creativity_stat'])
 
 #    Button:
 #        text: "go back"
