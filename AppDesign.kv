@@ -20,13 +20,13 @@ ScreenManagement:
     keep_ratio: False
 
 <MenuBackground@Image>
-    source: 'Assets/menu.jpg'
+    source: 'Assets/main.jpg'
     size: root.size
     allow_stretch: True
     keep_ratio: False
 
 <FightingBackground@Image>
-    source: 'Assets/ring.jpg'
+    source: 'Assets/battle.jpg'
     size: root.size
     allow_stretch: True
     keep_ratio: False
@@ -102,9 +102,9 @@ ScreenManagement:
     FloatLayout:
         MenuBackground
         Image:
-            source: 'Assets/avatarp.png'
-            size_hint: .4, .5
-            pos_hint: {'x':.3, 'y':.4}
+            source: 'Assets/RoboIT.png'
+            size_hint: .3, .5
+            pos_hint: {'x':.35, 'y':.4}
             allow_stretch: True
             keep_ratio: False
         Label:
@@ -138,10 +138,10 @@ ScreenManagement:
                     app.root.ids.fight_screen.boss_enemy()
         Label:
             id: coins_label
-            text: "Coins {0}".format(app.main_hero.coins)
+            text: "Coins: {0}".format(app.main_hero.coins)
             color: '#EBFC00'
             size_hint: .2, .2
-            pos_hint: {'right':1.06, 'top':1.07}
+            pos_hint: {'right':1.03, 'top':1.07}
             font_size: 15
         GridLayout:
             cols: 4
@@ -151,28 +151,32 @@ ScreenManagement:
 
             Label:
                 id: programming_stat_label
-                text: "Programming {0}".format(app.main_hero.programming_stat)
+                text: "Programming: {0}".format(app.main_hero.programming_stat)
+                color: '#ffcccb'
             UpgradeButton:
                 id: programming_upgrade_btn
                 on_release: root.upgrade('programming_stat')
 
             Label:
                 id: design_stat_label
-                text: "Design {0}".format(app.main_hero.design_stat)
+                text: "Design: {0}".format(app.main_hero.design_stat)
+                color: '#90ee90'
             UpgradeButton:
                 id: design_upgrade_btn
                 on_release: root.upgrade('design_stat')
 
             Label:
                 id: creativity_stat_label
-                text: "Creativity {0}".format(app.main_hero.creativity_stat)
+                text: "Creativity: {0}".format(app.main_hero.creativity_stat)
+                color: '##add8e6'
             UpgradeButton:
                 id: creativity_upgrade_btn
                 on_release: root.upgrade('creativity_stat')
 
             Label:
                 id: heal_stat_label
-                text: "Heal {0}/{1}".format(app.main_hero.heal['heal'],app.main_hero.heal['max_heal'])
+                text: "Heal: {0}/{1}".format(app.main_hero.heal['heal'],app.main_hero.heal['max_heal'])
+                color: '#CBC3E3'
             UpgradeButton:
                 id: heal_buy_btn
                 on_release: root.upgrade('heal')
@@ -197,7 +201,7 @@ ScreenManagement:
     FloatLayout:
         FightingBackground
         Image:
-            source: 'Assets/avatarp.png'
+            source: 'Assets/RoboIT.png'
             size_hint: .4, .5
             pos_hint: {'x':.0, 'y':.4}
             allow_stretch: True
@@ -234,7 +238,8 @@ ScreenManagement:
 
             Label:
                 id: programming_stat_label
-                text: "Programming {0}".format(app.main_hero.programming_stat)
+                text: "Programming: {0}".format(app.main_hero.programming_stat)
+                color: '#ffcccb'
             PlayerActionButton:
                 group: 'player_action'
                 on_state:
@@ -243,7 +248,8 @@ ScreenManagement:
 
             Label:
                 id: design_stat_label
-                text: "Design {0}".format(app.main_hero.design_stat)
+                text: "Design: {0}".format(app.main_hero.design_stat)
+                color: '#90ee90'
             PlayerActionButton:
                 group: 'player_action'
                 on_state:
@@ -252,7 +258,8 @@ ScreenManagement:
 
             Label:
                 id: creativity_stat_label
-                text: "Creativity {0}".format(app.main_hero.creativity_stat)
+                text: "Creativity: {0}".format(app.main_hero.creativity_stat)
+                color: '##add8e6'
             PlayerActionButton:
                 group: 'player_action'
                 on_state:
@@ -261,7 +268,8 @@ ScreenManagement:
 
             Label:
                 id: heal_stat_label
-                text: "Heal {0}/{1}".format(app.main_hero.heal['heal'],app.main_hero.heal['max_heal'])
+                text: "Heal: {0}/{1}".format(app.main_hero.heal['heal'],app.main_hero.heal['max_heal'])
+                color: '#CBC3E3'
             PlayerActionButton:
                 group: 'player_action'
                 on_state:
@@ -284,14 +292,17 @@ ScreenManagement:
             Label:
                 id: enemy_programming_stat_label
                 text: "Programming {0}".format(root.enemy.stats['programming_stat'])
+                color: '#ffcccb'
 
             Label:
                 id: enemy_design_stat_label
                 text: "Design {0}".format(root.enemy.stats['design_stat'])
+                color: '#90ee90'
 
             Label:
                 id: enemy_creativity_stat_label
                 text: "Creativity {0}".format(root.enemy.stats['creativity_stat'])
+                color: '##add8e6'
 
 #    Button:
 #        text: "go back"
