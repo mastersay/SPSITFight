@@ -32,7 +32,7 @@ ScreenManagement:
     keep_ratio: False
 
 <UpgradeButton@Button>
-    size_hint: .0, .0
+    size_hint: .3, .1
     background_color: '#FFD700'
     text: "+"
 <PlayerActionButton@Button>
@@ -58,7 +58,7 @@ ScreenManagement:
 
         TextInput:
             id: player_name_txtIn
-            hint_text: "Set your fighting name"
+            hint_text: "Enter your fighting name"
             size_hint: .4, .1
             font_size: self.size[0]/12
             pos_hint: {'x':.3, 'y':.6}
@@ -79,7 +79,7 @@ ScreenManagement:
             id: submit_button
             size_hint: .2, .1
             pos_hint: {'x':.4, 'y':.4}
-            text: "Setted!"
+            text: "Done! Let me in!"
             on_release: app.submit_btn()
 
 <MainScreen>
