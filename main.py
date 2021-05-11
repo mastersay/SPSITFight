@@ -158,8 +158,8 @@ class FightScreen(Screen):
         self.add_widget(self.starting_hit_label)
 
     def fight(self, *args):
-        pass
-        # self.starting_hit_label.parent.remove_widget(self.starting_hit_label)
+        # pass
+        self.starting_hit_label.parent.remove_widget(self.starting_hit_label)
         # hero_alive = True
         # enemy_alive = True
         #
