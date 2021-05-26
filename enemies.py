@@ -115,3 +115,4 @@ class BasicEnemy(EventDispatcher):
 
 BossHero("First", 10, {'programming_stat': 15, 'design_stat': 8, 'creativity_stat': 11})
 BossHero("Second", 20, {'programming_stat': 15, 'design_stat': 35, 'creativity_stat': 23})
+BossHero("Third", 30, {'programming_stat': 20, 'design_stat': 45, 'creativity_stat': 34})
