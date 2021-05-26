@@ -239,7 +239,8 @@ ScreenManagement:
             Label:
                 id: programming_stat_label
                 text: "Programming: {0}".format(app.main_hero.programming_stat)
-                color: '#ffcccb'
+                color: '#cc0000'
+                bold: True
             PlayerActionButton:
                 group: 'player_action'
                 on_state:
@@ -249,7 +250,8 @@ ScreenManagement:
             Label:
                 id: design_stat_label
                 text: "Design: {0}".format(app.main_hero.design_stat)
-                color: '#90ee90'
+                color: '#006600'
+                bold: True
             PlayerActionButton:
                 group: 'player_action'
                 on_state:
@@ -259,7 +261,8 @@ ScreenManagement:
             Label:
                 id: creativity_stat_label
                 text: "Creativity: {0}".format(app.main_hero.creativity_stat)
-                color: '##add8e6'
+                color: '#000066'
+                bold: True
             PlayerActionButton:
                 group: 'player_action'
                 on_state:
@@ -269,7 +272,8 @@ ScreenManagement:
             Label:
                 id: heal_stat_label
                 text: "Heal: {0}/{1}".format(app.main_hero.heal['heal'],app.main_hero.heal['max_heal'])
-                color: '#CBC3E3'
+                color: '#cc0099'
+                bold: True
             PlayerActionButton:
                 group: 'player_action'
                 on_state:
@@ -292,17 +296,20 @@ ScreenManagement:
             Label:
                 id: enemy_programming_stat_label
                 text: "Programming {0}".format(root.enemy.stats['programming_stat'])
-                color: '#ffcccb'
+                color: '#cc0000'
+                bold: True
 
             Label:
                 id: enemy_design_stat_label
                 text: "Design {0}".format(root.enemy.stats['design_stat'])
-                color: '#90ee90'
+                color: '#006600'
+                bold: True
 
             Label:
                 id: enemy_creativity_stat_label
                 text: "Creativity {0}".format(root.enemy.stats['creativity_stat'])
-                color: '##add8e6'
+                color: '#000066'
+                bold: True
 
 #    Button:
 #        text: "go back"
