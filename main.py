@@ -1,4 +1,5 @@
 import asyncio
+import threading
 import time
 from kivy.app import App
 from kivy.base import *
@@ -56,7 +57,6 @@ class MainHero(EventDispatcher):
 
         # killed bosses
         self.boss_kills = 0
-        print(save)
 
 
 class OpenScreen(Screen):
