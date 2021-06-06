@@ -25,6 +25,7 @@ class MainHero(EventDispatcher):
     nick = StringProperty()
     lvl = NumericProperty()
     coins = NumericProperty()
+    max_health = NumericProperty()
     health = NumericProperty()
     heal = DictProperty()
     programming_stat = NumericProperty()
@@ -32,31 +33,44 @@ class MainHero(EventDispatcher):
     creativity_stat = NumericProperty()
     boss_kills = NumericProperty()
 
-    def __init__(self, save):
-        super(MainHero, self).__init__()
-        # self.__dict__.update(save)
+    def __init__(self, save, **kwargs):
+        super(MainHero, self).__init__(**kwargs)
+        # on lvl change recalculate some properties
+        self.bind(lvl=lambda *largs: self.recompute())
         # name of player
         self.nick = "Player"
         # player lvl
-        self.lvl = 2
+        self.lvl = 1
         # amount of coins
         self.coins = 100
 
         # player stats
-        # player max health
-        self.max_health = self.lvl * 10
-        # player health
-        self.health = self.max_health
-        # amount of healing for health
-        self.heal = {'heal': 0, 'max_heal': self.lvl}
+        # killed bosses
+        self.boss_kills = 0
 
         # fight stats
         self.programming_stat = 1
         self.design_stat = 1
         self.creativity_stat = 1
+        if save:
+            for name, prop in self.properties().items():
+                if name != 'health' and name != 'max_health':
+                    prop.set(self, save[name])
+            else:
+                self.heal = {'heal': save['heal']['heal'], 'max_heal': self.lvl}
+        else:
+            # player max health
+            self.max_health = self.lvl * 10
+            # player health
+            self.health = self.max_health
+            # amount of healing for health
+            self.heal = {'heal': 1, 'max_heal': self.lvl}
 
-        # killed bosses
-        self.boss_kills = 0
+    # func to recalculate properties
+    def recompute(self):
+        self.max_health = self.lvl * 10
+        self.health = self.max_health
+        self.heal = {'heal': self.heal.get('heal'), 'max_heal': self.lvl}
 
 
 class OpenScreen(Screen):
@@ -293,8 +307,8 @@ class Design(App):
         super(Design, self).__init__(**kwargs)
         # self.main_hero = MainHero()
         self.boss_enemies = BossHero.enemies
-        self.main_hero = MainHero({})
-        # print(self.main_hero.__dir__())
+        self.main_hero = MainHero(self.on_start())
+        # self.main_hero = MainHero({})
 
     # Construct app
     def build(self):
@@ -317,17 +331,23 @@ class Design(App):
             self.root.current = 'MainScreen'
             self.root.ids.open_screen.player_name_txtIn.focus = False
 
-    # def on_start(self):
-    #     print(self.main_hero.__dict__)
-    #     # with open("progress_save.json", "r") as file:
-    #     #     self.main_hero = MainHero(json.load(file))
-    #
-    # def on_stop(self):
-    #     pass
-    # with open("progress_save.json", "w") as file:
-    #     file.write(json.dumps(self.main_hero.__dict__))
+    def on_start(self):
+        with open("progress_save.json", "r") as file:
+            try:
+                js = json.load(file)
+            except json.JSONDecodeError:
+                js = {}
+            finally:
+                return js
+
     def on_stop(self):
-        print(self.main_hero.__dict__)
+        def json_pick(obj_w_props):
+            dic = {name: obj_w_props.__getattribute__(name) for name in sorted(obj_w_props.properties(), key=len) if
+                   name != 'health' and name != "max_health"}
+            return dic
+
+        with open("progress_save.json", "w") as file:
+            file.write(json.dumps(json_pick(self.main_hero)))
 
     # async def root_task(self):
     #
