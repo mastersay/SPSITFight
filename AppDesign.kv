@@ -196,7 +196,7 @@ ScreenManagement:
     enemy_programming_stat_label: enemy_programming_stat_label
     enemy_design_stat_label: enemy_design_stat_label
     enemy_creativity_stat_label: enemy_creativity_stat_label
-
+    enemy_image: enemy_image
     FloatLayout:
         FightingBackground
         Image:
@@ -206,6 +206,7 @@ ScreenManagement:
             allow_stretch: True
             keep_ratio: False
         Image:
+            id: enemy_image
             source: 'Assets/ISTenemy.png'
             size_hint: .34, .46
             pos_hint: {'x':.65, 'y':.4}

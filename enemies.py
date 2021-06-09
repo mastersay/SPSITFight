@@ -11,12 +11,13 @@ class BossHero(EventDispatcher):
     lvl = NumericProperty()
     health = NumericProperty()
     stats = DictProperty()
-
-    def __init__(self, name: str, lvl: int, stats: dict):
+    image = StringProperty()
+    def __init__(self, name: str, lvl: int, stats: dict, image_source: str):
         super(BossHero, self).__init__()
         self.name = name
         self.lvl = lvl
         self.health = lvl * 10
+        self.image = image_source
         # self.programming_stat = stats['programming_stat']
         # self.design_stat = stats['design_stat']
         # self.creativity_stat = stats['creativity_stat']
@@ -65,7 +66,7 @@ class BasicEnemy(EventDispatcher):
 
     def __init__(self, hero_lvl: int):
         super(BasicEnemy, self).__init__()
-
+        self.image = 'Assets/ISTenemy.png'
         def ad_sub_generator(main_value: int, scale: int, operators=('+', '-')) -> int:
             return eval(f"{main_value}{choice(operators)}{scale}")
 
@@ -113,7 +114,7 @@ class BasicEnemy(EventDispatcher):
         return attack_pick
 
 
-BossHero("DudeMan", 10, {'programming_stat': 15, 'design_stat': 8, 'creativity_stat': 11})
-BossHero("ŠrenKI", 20, {'programming_stat': 15, 'design_stat': 35, 'creativity_stat': 23})
-BossHero("PRXman", 30, {'programming_stat': 20, 'design_stat': 45, 'creativity_stat': 34})
+BossHero("DudeMan", 10, {'programming_stat': 9, 'design_stat': 15, 'creativity_stat': 11}, "Assets/DudeMan.png")
+BossHero("ŠrenKI", 20, {'programming_stat': 15, 'design_stat': 38, 'creativity_stat': 25}, "Assets/ŠrenKI.png")
+BossHero("PRXman", 35, {'programming_stat': 50, 'design_stat': 45, 'creativity_stat': 34}, "Assets/PRXman.png")
 

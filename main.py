@@ -21,6 +21,7 @@ import json
 from os import stat
 import asynckivy
 
+
 # Player avatar
 class MainHero(EventDispatcher):
     nick = StringProperty()
@@ -43,7 +44,7 @@ class MainHero(EventDispatcher):
         # player lvl
         self.lvl = 1
         # amount of coins
-        self.coins = 10
+        self.coins = 5
 
         # player stats
         # killed bosses
@@ -82,6 +83,7 @@ class OpenScreen(Screen):
 
     def __init__(self, **kwargs):
         super(OpenScreen, self).__init__(**kwargs)
+
 
 class MainScreen(Screen):
     coins_label = ObjectProperty(None)
@@ -151,6 +153,7 @@ class FightScreen(Screen):
     # enemy_design_stat_label = ObjectProperty(None)
     # enemy_creativity_stat_label = ObjectProperty(None)
     enemy = ObjectProperty(rebind=True, defaultvalue=BasicEnemy(999))
+    enemy_image = ObjectProperty()
 
     starting_hit_label = ObjectProperty(None)
     starting_hit = StringProperty()
@@ -185,7 +188,8 @@ class FightScreen(Screen):
     async def fight(self, *args):
         try:
             self.starting_hit_label.parent.remove_widget(self.starting_hit_label)
-        except: pass
+        except:
+            pass
         hero_alive = True
         enemy_alive = True
 
@@ -295,14 +299,12 @@ class FightScreen(Screen):
     def reward(self):
         if self.enemy.__class__ == BossHero:
             self.app.main_hero.lvl += 3
-            self.app.main_hero.coins += random.randint(self.app.main_hero.lvl * 5, self.app.main_hero.lvl * 12)
+            self.app.main_hero.coins += random.randint(self.app.main_hero.lvl * 6, self.app.main_hero.lvl * 12)
             self.app.main_hero.boss_kills += 1
         else:
-            print(self.app.main_hero.coins)
-            self.app.main_hero.coins += random.randint(self.app.main_hero.lvl * 3,
-                                                       self.app.main_hero.lvl * random.randint(5, 8))
+            self.app.main_hero.coins += random.randint(self.app.main_hero.lvl * 4,
+                                                       self.app.main_hero.lvl * random.randint(6, 9))
             self.app.main_hero.lvl += 1
-            print(self.app.main_hero.coins)
 
         # Execute animation on screen open
 
@@ -313,6 +315,7 @@ class FightScreen(Screen):
 
     def on_pre_leave(self, *args):
         self.app.main_hero.health = self.app.main_hero.max_health
+        self.enemy.health = self.enemy.lvl * 10
         try:
             self.remove_widget(self.starting_hit_label)
         except:
@@ -324,6 +327,7 @@ class FightScreen(Screen):
         # Set enemy to boss
         try:
             self.enemy = self.app.boss_enemies[self.app.main_hero.boss_kills]
+            self.enemy_image.source = self.enemy.image
             self.app.root.current = 'FightScreen'
         except IndexError:
             # self.app.root.current = 'MainScreen'
@@ -344,6 +348,7 @@ class FightScreen(Screen):
             pass
 
     def basic_enemy(self):
+        self.enemy_image.source = 'Assets/ISTenemy.png'
         # Set and construct BasicEnemy
         self.enemy = BasicEnemy(self.app.main_hero.lvl)
         lowest_stat = min(self.app.main_hero.programming_stat, self.app.main_hero.design_stat,
@@ -409,7 +414,6 @@ class Design(App):
             try:
                 if stat('progress_save.json').st_size > 0:
                     self.root.current = 'MainScreen'
-                print("here")
             except FileNotFoundError:
                 pass
 
