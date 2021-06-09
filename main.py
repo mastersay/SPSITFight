@@ -19,7 +19,6 @@ from enemies import BossHero, BasicEnemy
 from random import choice
 import json
 from os import stat
-from kivy.core.audio import SoundLoader
 
 # Player avatar
 class MainHero(EventDispatcher):
