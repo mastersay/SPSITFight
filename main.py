@@ -1,6 +1,6 @@
 import asyncio
 import random
-import threading
+# import threading
 import time
 from kivy.app import App
 from kivy.base import *
@@ -46,7 +46,7 @@ class MainHero(EventDispatcher):
 
         # player stats
         # killed bosses
-        self.boss_kills = 4
+        self.boss_kills = 0
 
         # fight stats
         self.programming_stat = 1
@@ -158,7 +158,6 @@ class FightScreen(Screen):
     player_action_pick = StringProperty(allownone=True)
     player_action_buttons = ListProperty(ToggleButtonBehavior.get_widgets('player_action'))
 
-
     def __init__(self, **kwargs):
         super(FightScreen, self).__init__(**kwargs)
         # self.af_init = Clock.schedule_once(self.after_init)
@@ -183,7 +182,9 @@ class FightScreen(Screen):
         self.add_widget(self.starting_hit_label)
 
     async def fight(self, *args):
-        self.starting_hit_label.parent.remove_widget(self.starting_hit_label)
+        try:
+            self.starting_hit_label.parent.remove_widget(self.starting_hit_label)
+        except: pass
         hero_alive = True
         enemy_alive = True
 
@@ -194,7 +195,7 @@ class FightScreen(Screen):
             enemy_attack = self.enemy.stats[self.enemy.attack()]
             # Possible damage
             damage = enemy_attack - getattr(self.app.main_hero, enemy_attack_stat)
-            print(enemy_attack_stat, enemy_attack, damage)
+            # print(enemy_attack_stat, enemy_attack, damage)
             if damage >= 0:
                 if self.app.main_hero.health - damage > 0:
                     self.app.main_hero.health -= damage
@@ -202,7 +203,7 @@ class FightScreen(Screen):
                     nonlocal hero_alive
                     hero_alive = False
                     self.app.main_hero.health = 0
-                print(self.app.main_hero.health)
+                # print(self.app.main_hero.health)
             else:
                 pass  # TODO: warning that enemy is weaker than hero
             return hero_alive
@@ -227,32 +228,49 @@ class FightScreen(Screen):
             await asynckivy.or_from_iterable(
                 asynckivy.event(button, 'state') for button in buttons)
 
-            print(self.enemy.stats, self.player_action_pick)
-            enemy_attack = self.enemy.stats[self.player_action_pick]
-
-            # Possible damage
-            damage = getattr(self.app.main_hero, self.player_action_pick) - enemy_attack
-            print(self.player_action_pick, enemy_attack, damage)
-            if damage >= 0:
-                if self.enemy.health - damage > 0:
-                    self.enemy.health -= damage
+            # print(self.enemy.stats, self.player_action_pick)
+            try:
+                enemy_attack = self.enemy.stats[self.player_action_pick]
+                damage = getattr(self.app.main_hero, self.player_action_pick) - enemy_attack
+                # print(self.player_action_pick, enemy_attack, damage)
+                if damage >= 0:
+                    if self.enemy.health - damage > 0:
+                        self.enemy.health -= damage
+                    else:
+                        nonlocal enemy_alive
+                        enemy_alive = False
+                        self.enemy.health = 0
+                    # print(self.enemy.health)
                 else:
-                    nonlocal enemy_alive
-                    enemy_alive = False
-                    self.enemy.health = 0
-                print(self.enemy.health)
-            else:
-                pass  # TODO: warning that player is weaker than enemy
+                    pass  # TODO: warning that player is weaker than enemy
 
-            for button in buttons:
-                button.state = 'normal'
-            return enemy_alive
+                for button in buttons:
+                    button.state = 'normal'
+                return enemy_alive
+            except KeyError:
+                if self.app.main_hero.heal['heal'] != 0:
+                    gained_damage = self.app.main_hero.max_health - self.app.main_hero.health
+                    if gained_damage == 0:
+                        return await player_move()
+                    else:
+                        if gained_damage <= self.app.main_hero.heal['heal']:
+                            self.app.main_hero.health += gained_damage
+                            self.app.main_hero.heal['heal'] -= gained_damage
+                        else:
+                            self.app.main_hero.health += self.app.main_hero.heal['heal']
+                            self.app.main_hero.heal['heal'] = 0
+                        return enemy_alive
+
+                else:
+                    return await player_move()
+            # Possible damage
 
         if self.starting_hit == "Enemy":
             while True:
+                print(self.app.main_hero.health, self.enemy.health)
                 time.sleep(0.1)
                 if not enemy_move():
-                    print("Player dead", self.app.main_hero.health)  # TODO: Died warning for player
+                    print("Player dead")  # TODO: Died warning for player
                     break
                 elif not await player_move():
                     print("Enemy dead")  # TODO: Died warning for enemy
@@ -261,6 +279,7 @@ class FightScreen(Screen):
                     break
         else:
             while True:
+                print(self.app.main_hero.health, self.enemy.health)
                 time.sleep(0.1)
                 if not await player_move():
                     print("Enemy dead")  # TODO: Died warning for enemy
@@ -320,11 +339,19 @@ class FightScreen(Screen):
         try:
             self.app.root.ids.main_screen.remove_widget(self.anim_label)
             # self.anim_label.parent.remove_widget(self.anim_label)
-        except AttributeError: pass
+        except AttributeError:
+            pass
 
     def basic_enemy(self):
         # Set and construct BasicEnemy
         self.enemy = BasicEnemy(self.app.main_hero.lvl)
+        lowest_stat = min(self.app.main_hero.programming_stat, self.app.main_hero.design_stat,
+                          self.app.main_hero.creativity_stat)
+        print(self.enemy.stats)
+        print(all(a <= lowest_stat for a in self.enemy.stats.values()))
+        if all(a <= lowest_stat for a in self.enemy.stats.values()):
+            print(lowest_stat + 1)
+            self.enemy.stats['programming_stat'] += lowest_stat
 
     def player_action(self, action):
         self.player_action_pick = action
