@@ -48,7 +48,7 @@ class MainHero(EventDispatcher):
 
         # player stats
         # killed bosses
-        self.boss_kills = 0
+        self.boss_kills = 4
 
         # fight stats
         self.programming_stat = 1
@@ -160,6 +160,7 @@ class FightScreen(Screen):
 
     player_action_pick = StringProperty(allownone=True)
     player_action_buttons = ListProperty(ToggleButtonBehavior.get_widgets('player_action'))
+
 
     def __init__(self, **kwargs):
         super(FightScreen, self).__init__(**kwargs)
@@ -306,9 +307,23 @@ class FightScreen(Screen):
         # Set enemy to boss
         try:
             self.enemy = self.app.boss_enemies[self.app.main_hero.boss_kills]
+            self.app.root.current = 'FightScreen'
         except IndexError:
+            # self.app.root.current = 'MainScreen'
+            # print(self.app.root.ids.boss_fight_button.disabled
 
-            self.app.root.current = 'MainScreen'
+            self.anim = Animation(duration=1, font_size=90)
+            self.anim_label = Label(text="All Bosses Defeated", color='red')
+            self.anim.start(widget=self.anim_label)
+            time.sleep(0.1)
+            self.app.root.ids.main_screen.add_widget(self.anim_label)
+            self.anim.bind(on_complete=lambda *largs: self.temp())
+
+    def temp(self):
+        try:
+            self.app.root.ids.main_screen.remove_widget(self.anim_label)
+            # self.anim_label.parent.remove_widget(self.anim_label)
+        except AttributeError: pass
 
     def basic_enemy(self):
         # Set and construct BasicEnemy
