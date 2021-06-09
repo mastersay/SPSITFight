@@ -113,7 +113,7 @@ class BasicEnemy(EventDispatcher):
         return attack_pick
 
 
-BossHero("First", 10, {'programming_stat': 15, 'design_stat': 8, 'creativity_stat': 11})
-BossHero("Second", 20, {'programming_stat': 15, 'design_stat': 35, 'creativity_stat': 23})
+BossHero("DudeMan", 10, {'programming_stat': 15, 'design_stat': 8, 'creativity_stat': 11})
+BossHero("", 20, {'programming_stat': 15, 'design_stat': 35, 'creativity_stat': 23})
 BossHero("Third", 30, {'programming_stat': 20, 'design_stat': 45, 'creativity_stat': 34})
-BossHero("Last", 999, {'programming_stat': 999, 'design_stat': 999, 'creativity_stat': 999})
+

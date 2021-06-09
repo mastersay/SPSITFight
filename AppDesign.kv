@@ -14,19 +14,19 @@ ScreenManagement:
         id: fight_screen
 
 <BasicBackground@Image>
-    source: 'Assets/name.jpg'
+    source: 'Assets/name_bc2.jpg'
     size: root.size
     allow_stretch: True
     keep_ratio: False
 
 <MenuBackground@Image>
-    source: 'Assets/menubc.jpg'
+    source: 'Assets/main_bc.jpg'
     size: root.size
     allow_stretch: True
     keep_ratio: False
 
 <FightingBackground@Image>
-    source: 'Assets/kamo.jpg'
+    source: 'Assets/Fighting_bc.jpg'
     size: root.size
     allow_stretch: True
     keep_ratio: False
@@ -57,7 +57,7 @@ ScreenManagement:
 
         TextInput:
             id: player_name_txtIn
-            hint_text: "Enter your fighting name"
+            hint_text: "Enter name to join to ITE class"
             size_hint: .4, .1
             font_size: self.size[0]/12
             pos_hint: {'x':.3, 'y':.6}
@@ -104,7 +104,7 @@ ScreenManagement:
         Image:
             source: 'Assets/ITEplayer.png'
             size_hint: .375, .5
-            pos_hint: {'x':.35, 'y':.4}
+            pos_hint: {'x':.3, 'y':.4}
             allow_stretch: True
             keep_ratio: False
         Label:
@@ -123,7 +123,7 @@ ScreenManagement:
 
             Button:
                 id: fight_button
-                text: "Battles"
+                text: "Against IST battles"
                 background_color: '#006400'
                 on_release:
                     app.root.current = 'FightScreen'
@@ -131,7 +131,7 @@ ScreenManagement:
 
             Button:
                 id: boss_fight_button
-                text: "Boss battles"
+                text: "Commander battles"
                 background_color: '#8B0000'
                 on_release:
                     app.root.ids.fight_screen.boss_enemy()

@@ -19,7 +19,7 @@ from enemies import BossHero, BasicEnemy
 from random import choice
 import json
 from os import stat
-
+from kivy.core.audio import SoundLoader
 
 # Player avatar
 class MainHero(EventDispatcher):
@@ -82,7 +82,6 @@ class OpenScreen(Screen):
 
     def __init__(self, **kwargs):
         super(OpenScreen, self).__init__(**kwargs)
-
 
 class MainScreen(Screen):
     coins_label = ObjectProperty(None)
