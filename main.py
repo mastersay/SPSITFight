@@ -17,7 +17,6 @@ from kivy.clock import Clock, mainthread
 from kivy.animation import Animation
 from enemies import BossHero, BasicEnemy
 from random import choice
-import asynckivy
 import json
 from os import stat
 

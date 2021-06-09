@@ -20,13 +20,13 @@ ScreenManagement:
     keep_ratio: False
 
 <MenuBackground@Image>
-    source: 'Assets/main.jpg'
+    source: 'Assets/menubc.jpg'
     size: root.size
     allow_stretch: True
     keep_ratio: False
 
 <FightingBackground@Image>
-    source: 'Assets/battle.jpg'
+    source: 'Assets/kamo.jpg'
     size: root.size
     allow_stretch: True
     keep_ratio: False
@@ -102,8 +102,8 @@ ScreenManagement:
     FloatLayout:
         MenuBackground
         Image:
-            source: 'Assets/RoboIT.png'
-            size_hint: .3, .5
+            source: 'Assets/ITEplayer.png'
+            size_hint: .375, .5
             pos_hint: {'x':.35, 'y':.4}
             allow_stretch: True
             keep_ratio: False
@@ -200,15 +200,15 @@ ScreenManagement:
     FloatLayout:
         FightingBackground
         Image:
-            source: 'Assets/RoboIT.png'
+            source: 'Assets/ITEplayer.png'
             size_hint: .4, .5
             pos_hint: {'x':.0, 'y':.4}
             allow_stretch: True
             keep_ratio: False
         Image:
-            source: 'Assets/enemy1.png'
-            size_hint: .7, .5
-            pos_hint: {'x':.4, 'y':.4}
+            source: 'Assets/ISTenemy.png'
+            size_hint: .34, .46
+            pos_hint: {'x':.65, 'y':.4}
             allow_stretch: True
             keep_ratio: False
         Label:
