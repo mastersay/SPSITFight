@@ -75,9 +75,9 @@ class BasicEnemy(EventDispatcher):
 
         primary_stat, sc_stat, third_stat = sample(['programming_stat', 'design_stat', 'creativity_stat'], 3)
         self.stats = {
-            primary_stat: ad_sub_generator(self.lvl, randint(round(self.lvl / 2), self.lvl), operators='+'),
+            primary_stat: ad_sub_generator(self.lvl, randint(round(self.lvl / 2), round(self.lvl)), operators='+'),
             sc_stat: ad_sub_generator(self.lvl, randint(0, round(self.lvl / 2)), operators='+'),
-            third_stat: ad_sub_generator(self.lvl, randint(0, self.lvl - 1))}
+            third_stat: ad_sub_generator(self.lvl, randint(0, round(self.lvl - 1)))}
 
     # Enemy attack
     def attack(self) -> str:
@@ -116,3 +116,4 @@ class BasicEnemy(EventDispatcher):
 BossHero("First", 10, {'programming_stat': 15, 'design_stat': 8, 'creativity_stat': 11})
 BossHero("Second", 20, {'programming_stat': 15, 'design_stat': 35, 'creativity_stat': 23})
 BossHero("Third", 30, {'programming_stat': 20, 'design_stat': 45, 'creativity_stat': 34})
+BossHero("Last", 999, {'programming_stat': 999, 'design_stat': 999, 'creativity_stat': 999})

@@ -1,4 +1,5 @@
 import asyncio
+import random
 import threading
 import time
 from kivy.app import App
@@ -32,7 +33,7 @@ class MainHero(EventDispatcher):
     programming_stat = NumericProperty()
     design_stat = NumericProperty()
     creativity_stat = NumericProperty()
-    boss_kills = NumericProperty()
+    boss_kills = NumericProperty(max=4)
 
     def __init__(self, save, **kwargs):
         super(MainHero, self).__init__(**kwargs)
@@ -43,7 +44,7 @@ class MainHero(EventDispatcher):
         # player lvl
         self.lvl = 1
         # amount of coins
-        self.coins = 100
+        self.coins = 10
 
         # player stats
         # killed bosses
@@ -57,6 +58,7 @@ class MainHero(EventDispatcher):
             for name, prop in self.properties().items():
                 if name != 'health' and name != 'max_health':
                     prop.set(self, save[name])
+                    print(self.programming_stat)
             else:
                 self.heal = {'heal': save['heal']['heal'], 'max_heal': self.lvl}
         else:
@@ -65,7 +67,7 @@ class MainHero(EventDispatcher):
             # player health
             self.health = self.max_health
             # amount of healing for health
-            self.heal = {'heal': 1, 'max_heal': self.lvl}
+            self.heal = {'heal': 0, 'max_heal': self.lvl}
 
     # func to recalculate properties
     def recompute(self):
@@ -250,22 +252,42 @@ class FightScreen(Screen):
 
         if self.starting_hit == "Enemy":
             while True:
+                time.sleep(0.1)
                 if not enemy_move():
-                    print("Player dead")  # TODO: Died warning for player
+                    print("Player dead", self.app.main_hero.health)  # TODO: Died warning for player
                     break
                 elif not await player_move():
                     print("Enemy dead")  # TODO: Died warning for enemy
+                    self.app.root.current = 'MainScreen'
+                    self.reward()
                     break
         else:
             while True:
+                time.sleep(0.1)
                 if not await player_move():
-                    print("Player dead")  # TODO: Died warning for player
+                    print("Enemy dead")  # TODO: Died warning for enemy
+                    self.app.root.current = 'MainScreen'
+                    self.reward()
                     break
                 elif not enemy_move():
-                    print("Enemy dead")  # TODO: Died warning for enemy
+                    print("Player dead", self.app.main_hero.health)  # TODO: Died warning for player
                     break
+        self.app.root.current = 'MainScreen'
 
-    # Execute animation on screen open
+    def reward(self):
+        if self.enemy.__class__ == BossHero:
+            self.app.main_hero.lvl += 3
+            self.app.main_hero.coins += random.randint(self.app.main_hero.lvl * 5, self.app.main_hero.lvl * 12)
+            self.app.main_hero.boss_kills += 1
+        else:
+            print(self.app.main_hero.coins)
+            self.app.main_hero.coins += random.randint(self.app.main_hero.lvl * 3,
+                                                       self.app.main_hero.lvl * random.randint(5, 8))
+            self.app.main_hero.lvl += 1
+            print(self.app.main_hero.coins)
+
+        # Execute animation on screen open
+
     def on_enter(self, *args):
         # self.starting_hit_anim = Animation(duration=1,) font_size=130, color=col)
         self.starting_hit_anim.start(widget=self.starting_hit_label)
@@ -273,12 +295,20 @@ class FightScreen(Screen):
 
     def on_pre_leave(self, *args):
         self.app.main_hero.health = self.app.main_hero.max_health
+        try:
+            self.remove_widget(self.starting_hit_label)
+        except:
+            pass
         for btn in ToggleButtonBehavior.get_widgets('player_action'):
             btn.state = 'normal'
 
     def boss_enemy(self):
         # Set enemy to boss
-        self.enemy = self.app.boss_enemies[self.app.main_hero.boss_kills]
+        try:
+            self.enemy = self.app.boss_enemies[self.app.main_hero.boss_kills]
+        except IndexError:
+
+            self.app.root.current = 'MainScreen'
 
     def basic_enemy(self):
         # Set and construct BasicEnemy
@@ -336,15 +366,23 @@ class Design(App):
         Clock.schedule_once(lambda *largs: scrn(), -1)
 
         def scrn():
-            if stat('progress_save.json').st_size > 0:
-                self.root.current = 'MainScreen'
-        with open("progress_save.json", "r") as file:
             try:
-                js = json.load(file)
-            except json.JSONDecodeError:
-                js = {}
-            finally:
-                return js
+                if stat('progress_save.json').st_size > 0:
+                    self.root.current = 'MainScreen'
+                print("here")
+            except FileNotFoundError:
+                pass
+
+        try:
+            with open("progress_save.json", "r") as file:
+                try:
+                    js = json.load(file)
+                except json.JSONDecodeError:
+                    js = {}
+                finally:
+                    return js
+        except FileNotFoundError:
+            pass
 
     def on_stop(self):
         def json_pick(obj_w_props):
@@ -355,17 +393,18 @@ class Design(App):
         with open("progress_save.json", "w") as file:
             file.write(json.dumps(json_pick(self.main_hero)))
 
-    # async def root_task(self):
-    #
-    #     async with trio.open_nursery() as nursery:
-    #         self.nursery = nursery
-    #
-    #         async def app_task():
-    #             await self.async_run(async_lib='trio')
-    #
-    #             nursery.cancel_scope.cancel()
-    #
-    #         nursery.start_soon(app_task)
+
+# async def root_task(self):
+#
+#     async with trio.open_nursery() as nursery:
+#         self.nursery = nursery
+#
+#         async def app_task():
+#             await self.async_run(async_lib='trio')
+#
+#             nursery.cancel_scope.cancel()
+#
+#         nursery.start_soon(app_task)
 
 
 if __name__ == "__main__":
