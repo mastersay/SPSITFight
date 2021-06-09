@@ -19,6 +19,7 @@ from enemies import BossHero, BasicEnemy
 from random import choice
 import json
 from os import stat
+import asynckivy
 
 # Player avatar
 class MainHero(EventDispatcher):
