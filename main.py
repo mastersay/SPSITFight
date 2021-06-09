@@ -18,6 +18,7 @@ from enemies import BossHero, BasicEnemy
 from random import choice
 import asynckivy
 import json
+from os import stat
 
 
 # Player avatar
@@ -332,6 +333,11 @@ class Design(App):
             self.root.ids.open_screen.player_name_txtIn.focus = False
 
     def on_start(self):
+        Clock.schedule_once(lambda *largs: scrn(), -1)
+
+        def scrn():
+            if stat('progress_save.json').st_size > 0:
+                self.root.current = 'MainScreen'
         with open("progress_save.json", "r") as file:
             try:
                 js = json.load(file)
